@@ -29,6 +29,9 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="USASOCCustomizations.d.ts">
+      <SubType>Code</SubType>
+    </Content>
     <None Include="app.ts" />
     <Content Include="package.json" />
     <Content Include="README.md" />
@@ -39,6 +42,12 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="SnTypings\base.d.ts" />
+    <TypeScriptCompile Include="TaskHelper.d.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="UsasocUserNotificationManager.d.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
   <ProjectExtensions>

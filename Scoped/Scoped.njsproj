@@ -35,8 +35,17 @@
     <Content Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="business_rules.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="SnTypings\base.d.ts" />
     <TypeScriptCompile Include="SnTypings\projectManagement.d.ts" />
+    <TypeScriptCompile Include="TaskHelper.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="USASOCCustomizations.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="UsasocUserNotificationManager.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

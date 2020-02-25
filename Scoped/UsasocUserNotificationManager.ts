@@ -1,7 +1,7 @@
 /// <reference path="SnTypings/base.d.ts" />
 
-interface NameLabelAndFailMessage {
-    name: string;
+interface NameLabelAndFailMessage<T extends string> {
+    name: T;
     label: string;
     failAdj: string;
 }
@@ -29,12 +29,18 @@ interface UserProfileFieldComplianceResult {
 }
 interface UserProfileFieldAccessError extends Omit<UserProfileFieldComplianceResult, "passed">, IUsasocUserNotificationManagerFault {
 }
+type PROFILE_FIELD_NAME = 'building' | 'department' | 'u_red_phone';
+interface UserProfileComplianceFieldResults {
+    building: UserProfileFieldComplianceResult | UserProfileFieldAccessError;
+    department: UserProfileFieldComplianceResult | UserProfileFieldAccessError;
+    u_red_phone: UserProfileFieldComplianceResult | UserProfileFieldAccessError;
+}
 interface UserProfileComplianceCheck {
     passed: number;
     failed: number;
     notChecked: number;
     message: string;
-    results: { [name: string]: UserProfileFieldComplianceResult | UserProfileFieldAccessError; }
+    results: UserProfileComplianceFieldResults;
 }
 //declare var global: NodeJS.Global & ScopedAppsGlobal;
 //declare interface Global {
@@ -88,7 +94,7 @@ const UsasocUserNotificationManager: Readonly<UsasocUserNotificationManagerConst
     });
 
     const SYSID_RE: RegExp = /^[\da-f]{32}$/i;
-    const PROFILE_FIELDS: NameLabelAndFailMessage[] = [
+    const PROFILE_FIELDS: NameLabelAndFailMessage<PROFILE_FIELD_NAME>[] = [
         { name: 'building', label: 'Building', failAdj: "selected" },
         { name: 'department', label: 'Department', failAdj: "selected" },
         { name: 'u_red_phone', label: 'Red Phone', failAdj: "empty" }
@@ -151,7 +157,7 @@ const UsasocUserNotificationManager: Readonly<UsasocUserNotificationManagerConst
             notChecked: 0,
             results: { }
         };
-        var failed: NameLabelAndFailMessage[] = PROFILE_FIELDS.filter(function (value: NameLabelAndFailMessage) {
+        var failed: NameLabelAndFailMessage<PROFILE_FIELD_NAME>[] = PROFILE_FIELDS.filter(function (value: NameLabelAndFailMessage<PROFILE_FIELD_NAME>) {
             try {
                 if (gs.nil(sys_user[value.name])) {
                     result.results[value.name] = { label: value.label, passed: false };
@@ -178,21 +184,21 @@ const UsasocUserNotificationManager: Readonly<UsasocUserNotificationManagerConst
             else
                 result.message = "All compliance checks were inconclusive due to unexpected errors."
         } else {
-            var last: NameLabelAndFailMessage = failed.pop();
+            var last: NameLabelAndFailMessage<PROFILE_FIELD_NAME> = failed.pop();
             if (result.notChecked == 0) {
                 if (failed.length == 0)
                     result.message = last.label + " is not " + last.failAdj + ".";
                 else
-                    result.message = failed.map(function (value: NameLabelAndFailMessage) { return value.label; }).join(", ") + " and " + last.label + " are empty.";
+                    result.message = failed.map(function (value: NameLabelAndFailMessage<PROFILE_FIELD_NAME>) { return value.label; }).join(", ") + " and " + last.label + " are empty.";
             } else if (result.notChecked == 1) {
                 if (failed.length == 0)
                     result.message = last.label + " is not " + last.failAdj + "; 1 check failed due to unexpected error.";
                 else
-                    result.message = failed.map(function (value: NameLabelAndFailMessage) { return value.label; }).join(", ") + " and " + last.label + " are empty; 1 check failed due to unexpected error.";
+                    result.message = failed.map(function (value: NameLabelAndFailMessage<PROFILE_FIELD_NAME>) { return value.label; }).join(", ") + " and " + last.label + " are empty; 1 check failed due to unexpected error.";
             } else if (failed.length == 0)
                 result.message = last.label + " is not " + last.failAdj + "; " + result.notChecked + " checks failed due to unexpected errors.";
             else
-                result.message = failed.map(function (value: NameLabelAndFailMessage) { return value.label; }).join(", ") + " and " + last.label + " are empty; " + result.notChecked + " checks failed due to unexpected errors.";
+                result.message = failed.map(function (value: NameLabelAndFailMessage<PROFILE_FIELD_NAME>) { return value.label; }).join(", ") + " and " + last.label + " are empty; " + result.notChecked + " checks failed due to unexpected errors.";
         }
         return result;
     };
