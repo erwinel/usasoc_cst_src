@@ -10,7 +10,8 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>62d18b2f-a353-4532-a03d-856c9d7e2727</ProjectGuid>
-    <ProjectHome>.</ProjectHome>
+    <ProjectHome>
+    </ProjectHome>
     <StartupFile>app.ts</StartupFile>
     <StartWebBrowser>False</StartWebBrowser>
     <SearchPath>
@@ -38,10 +39,25 @@
     <Content Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Generic IT Request\" />
+    <Folder Include="SnTypings\x_44813_phys_net\" />
+    <Folder Include="SnTypings\x_44813_sec_clsif\" />
     <Folder Include="SnTypings\" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="SnTypings\base.d.ts" />
+    <TypeScriptCompile Include="Generic IT Request\Initialize Fields.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="getTableInfo.ts" />
+    <TypeScriptCompile Include="SnTypings\CMDB.d.ts" />
+    <TypeScriptCompile Include="SnTypings\DictionaryBase.d.ts" />
+    <TypeScriptCompile Include="SnTypings\GlideBase.d.ts" />
+    <TypeScriptCompile Include="SnTypings\index.d.ts" />
+    <TypeScriptCompile Include="SnTypings\JavaAPI.d.ts" />
+    <TypeScriptCompile Include="SnTypings\Rhino.d.ts" />
+    <TypeScriptCompile Include="SnTypings\ServiceCatalog.d.ts" />
+    <TypeScriptCompile Include="SnTypings\x_44813_phys_net\index.d.ts" />
+    <TypeScriptCompile Include="SnTypings\x_44813_sec_clsif\index.d.ts" />
     <TypeScriptCompile Include="TaskHelper.d.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

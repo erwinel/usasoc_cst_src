@@ -1,5 +1,7 @@
 "use strict";
 /// <reference path="SnTypings/index.d.ts" />
+/// <reference path="SnTypings/js_includes_listv2_doctype.d.ts" />
+/// <reference path="SnTypings/js_includes_ui16_form.d.ts" />
 /// <reference path="UsasocUserNotificationManager.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 var USASOC_OnLogin = (function () {
@@ -17,12 +19,28 @@ var USASOC_OnLogin = (function () {
         setValidated();
         USASOC_OnLogin._dialogWindow.destroy();
         USASOC_OnLogin._dialogWindow = null;
+        g_navigation.openRecord("sys_user", g_user.userID);
     };
-    addLoadEvent(function () {
+    addLateLoadEvent(function () {
         try {
+            var tableName = '';
+            if (typeof g_form !== 'undefined' && null != g_form) {
+                jslog('g_form.getTableName() == ' + ((typeof g_form.getTableName() !== 'undefined') ? JSON.stringify(g_form.getTableName()) : 'undefined'));
+                if (typeof g_form.getTableName() === 'string')
+                    tableName = g_form.getTableName();
+            }
+            else if (typeof window.opener != 'undefined' && null != window.opener && typeof window.opener.g_form !== 'undefined' && null != window.opener.g_form) {
+                if (typeof window.opener.g_form.getTableName() === 'string')
+                    tableName = window.opener.g_form.getTableName();
+            }
+            if (tableName == 'sys_user' && !g_user.hasRole('admin')) {
+                window.sessionStorage.setItem(USASOC_OnLogin.UI_PAGE_ID, "");
+                USASOC_OnLogin._isChecked = false;
+                return;
+            }
             if (USASOC_OnLogin._isChecked)
                 return;
-            if (window.sessionStorage.getItem(USASOC_OnLogin.UI_PAGE_ID) == USASOC_OnLogin.SESSION_CHECKED_VALUE) {
+            if (window.sessionStorage.getItem(USASOC_OnLogin.UI_PAGE_ID) == USASOC_OnLogin.SESSION_CHECKED_VALUE || g_user.hasRole('admin')) {
                 USASOC_OnLogin._isChecked = true;
                 return;
             }

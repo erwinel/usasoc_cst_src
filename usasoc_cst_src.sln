@@ -7,6 +7,9 @@ Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "Scoped", "Scoped\Scoped.njs
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E8BC0B4C-CA43-4D7D-B419-DE832DEB567A}"
 	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		.gitmodules = .gitmodules
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
@@ -14,8 +17,6 @@ EndProject
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "Global", "Global\Global.njsproj", "{62D18B2F-A353-4532-A03D-856C9D7E2727}"
 EndProject
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "Client", "Client\Client.njsproj", "{609877F2-8F1B-4DFC-8103-F7A4D2EC8570}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleEnvironment", "ExampleEnvironment\ExampleEnvironment.csproj", "{418C0C7E-3862-483E-8148-54CBF3638641}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +36,6 @@ Global
 		{609877F2-8F1B-4DFC-8103-F7A4D2EC8570}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{609877F2-8F1B-4DFC-8103-F7A4D2EC8570}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{609877F2-8F1B-4DFC-8103-F7A4D2EC8570}.Release|Any CPU.Build.0 = Release|Any CPU
-		{418C0C7E-3862-483E-8148-54CBF3638641}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{418C0C7E-3862-483E-8148-54CBF3638641}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{418C0C7E-3862-483E-8148-54CBF3638641}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{418C0C7E-3862-483E-8148-54CBF3638641}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,4 @@
-/// <reference path="SnTypings/base.d.ts" />
+/// <reference path="SnTypings/index.d.ts" />
 
 declare namespace x_44813_usasoc_cst {
 	/**
