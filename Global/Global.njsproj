@@ -41,24 +41,24 @@
   <ItemGroup>
     <Folder Include="Generic IT Request\" />
     <Folder Include="types\" />
-    <Folder Include="SnTypings\x_44813_phys_net\" />
-    <Folder Include="SnTypings\x_44813_sec_clsif\" />
-    <Folder Include="SnTypings\" />
+    <Folder Include="types\service-now\x_44813_phys_net\" />
+    <Folder Include="types\service-now\x_44813_sec_clsif\" />
+    <Folder Include="types\service-now\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Generic IT Request\Initialize Fields.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="getTableInfo.ts" />
-    <TypeScriptCompile Include="SnTypings\CMDB.d.ts" />
-    <TypeScriptCompile Include="SnTypings\DictionaryBase.d.ts" />
-    <TypeScriptCompile Include="SnTypings\GlideBase.d.ts" />
-    <TypeScriptCompile Include="SnTypings\index.d.ts" />
-    <TypeScriptCompile Include="SnTypings\JavaAPI.d.ts" />
-    <TypeScriptCompile Include="SnTypings\Rhino.d.ts" />
-    <TypeScriptCompile Include="SnTypings\ServiceCatalog.d.ts" />
-    <TypeScriptCompile Include="SnTypings\x_44813_phys_net\index.d.ts" />
-    <TypeScriptCompile Include="SnTypings\x_44813_sec_clsif\index.d.ts" />
+    <TypeScriptCompile Include="types\service-now\CMDB.d.ts" />
+    <TypeScriptCompile Include="types\service-now\DictionaryBase.d.ts" />
+    <TypeScriptCompile Include="types\service-now\GlideBase.d.ts" />
+    <TypeScriptCompile Include="types\service-now\index.d.ts" />
+    <TypeScriptCompile Include="types\service-now\JavaAPI.d.ts" />
+    <TypeScriptCompile Include="types\service-now\Rhino.d.ts" />
+    <TypeScriptCompile Include="types\service-now\ServiceCatalog.d.ts" />
+    <TypeScriptCompile Include="types\service-now\x_44813_phys_net\index.d.ts" />
+    <TypeScriptCompile Include="types\service-now\x_44813_sec_clsif\index.d.ts" />
     <TypeScriptCompile Include="TaskHelper.d.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

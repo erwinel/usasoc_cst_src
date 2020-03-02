@@ -1,4 +1,4 @@
-/// <reference path="SnTypings/base.d.ts" />
+/// <reference path="types/service-now/index.d.ts" />
 /// <reference path="USASOCCustomizations.ts" />
 
 namespace usasoc_idea_submitting {

@@ -1,4 +1,4 @@
-/// <reference path="SnTypings/base.d.ts" />
+/// <reference path="types/service-now/index.d.ts" />
 /**
  * ServiceNow instance SDLC Stage.
  * Production=prod,User Acceptance Testing=uat,Pre-Deployment Testing=test,Development=dev,Sandbox=sb,(none)=none

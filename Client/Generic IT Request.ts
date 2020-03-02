@@ -1,4 +1,4 @@
-/// <reference path="SnTypings/index.d.ts" />
+/// <reference path="types/service-now/index.d.ts" />
 
 namespace generic_it_request {
 	function read_only_after_approve() {

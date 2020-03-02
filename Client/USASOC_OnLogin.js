@@ -1,7 +1,7 @@
 "use strict";
-/// <reference path="SnTypings/index.d.ts" />
-/// <reference path="SnTypings/js_includes_listv2_doctype.d.ts" />
-/// <reference path="SnTypings/js_includes_ui16_form.d.ts" />
+/// <reference path="types/service-now/index.d.ts" />
+/// <reference path="types/service-now/js_includes_listv2_doctype.d.ts" />
+/// <reference path="types/service-now/js_includes_ui16_form.d.ts" />
 /// <reference path="UsasocUserNotificationManager.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 var USASOC_OnLogin = (function () {

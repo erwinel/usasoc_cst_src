@@ -39,8 +39,8 @@
     <TypeScriptCompile Include="business_rules.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="SnTypings\base.d.ts" />
-    <TypeScriptCompile Include="SnTypings\projectManagement.d.ts" />
+    <TypeScriptCompile Include="types\service-now\base.d.ts" />
+    <TypeScriptCompile Include="types\service-now\projectManagement.d.ts" />
     <TypeScriptCompile Include="TaskHelper.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -53,7 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="types\" />
-    <Folder Include="SnTypings\" />
+    <Folder Include="types\service-now\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
   <ProjectExtensions>

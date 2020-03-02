@@ -1,4 +1,4 @@
-/// <reference path="SnTypings/base.d.ts" />
+/// <reference path="types/service-now/index.d.ts" />
 interface ITaskHelper extends ICustomClassBase<ITaskHelper, "TaskHelper"> {
     getCaller(): sys_userFields | undefined;
     isVip(): boolean;

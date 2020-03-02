@@ -1,4 +1,4 @@
-/// <reference path="SnTypings/base.d.ts" />
+/// <reference path="types/service-now/index.d.ts" />
 var UsasocUserNotificationManager = (function () {
     var UsasocUserNotificationManagerConstructor = Class.create();
     UsasocUserNotificationManagerConstructor.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {

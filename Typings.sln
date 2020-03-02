@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "ClientScoped", "Client\SnTypings\ClientScoped.njsproj", "{A3A28966-32BA-475B-91E6-89F3307E01ED}"
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "ClientScoped", "Client\types\service-now\ClientScoped.njsproj", "{A3A28966-32BA-475B-91E6-89F3307E01ED}"
 EndProject
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "ServerGlobal", "Global\SnTypings\ServerGlobal.njsproj", "{9641D973-D506-4120-9D9F-DD4B9EC8B346}"
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "ServerGlobal", "Global\types\service-now\ServerGlobal.njsproj", "{9641D973-D506-4120-9D9F-DD4B9EC8B346}"
 EndProject
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "ServerScoped", "Scoped\SnTypings\ServerScoped.njsproj", "{7BF03AA3-2B53-4488-9F4D-3898D8A1E5E3}"
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "ServerScoped", "Scoped\types\service-now\ServerScoped.njsproj", "{7BF03AA3-2B53-4488-9F4D-3898D8A1E5E3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleEnvironment", "ExampleEnvironment\ExampleEnvironment.csproj", "{418C0C7E-3862-483E-8148-54CBF3638641}"
 EndProject

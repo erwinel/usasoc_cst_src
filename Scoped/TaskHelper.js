@@ -1,4 +1,4 @@
-/// <reference path="SnTypings/base.d.ts" />
+/// <reference path="types/service-now/index.d.ts" />
 var TaskHelper = (function () {
     var taskHelperConstructor = Class.create();
     function getCaller(task) {

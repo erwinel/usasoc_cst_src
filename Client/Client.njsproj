@@ -39,25 +39,25 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="types\" />
-    <Folder Include="SnTypings\" />
-    <Folder Include="SnTypings\ServicePortal\" />
+    <Folder Include="types\service-now\" />
+    <Folder Include="types\service-now\ServicePortal\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Generic IT Request.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="SnTypings\base.d.ts" />
-    <TypeScriptCompile Include="SnTypings\index.d.ts">
+    <TypeScriptCompile Include="types\service-now\base.d.ts" />
+    <TypeScriptCompile Include="types\service-now\index.d.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="SnTypings\js_includes_doctype.d.ts">
+    <TypeScriptCompile Include="types\service-now\js_includes_doctype.d.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="SnTypings\js_includes_last_doctype.d.ts" />
-    <TypeScriptCompile Include="SnTypings\js_includes_listv2_doctype.d.ts" />
-    <TypeScriptCompile Include="SnTypings\js_includes_ui16_form.d.ts" />
-    <TypeScriptCompile Include="SnTypings\ServicePortal\index.d.ts" />
-    <TypeScriptCompile Include="SnTypings\ServicePortal\spUtil.ts" />
+    <TypeScriptCompile Include="types\service-now\js_includes_last_doctype.d.ts" />
+    <TypeScriptCompile Include="types\service-now\js_includes_listv2_doctype.d.ts" />
+    <TypeScriptCompile Include="types\service-now\js_includes_ui16_form.d.ts" />
+    <TypeScriptCompile Include="types\service-now\ServicePortal\index.d.ts" />
+    <TypeScriptCompile Include="types\service-now\ServicePortal\spUtil.ts" />
     <TypeScriptCompile Include="UsasocUserNotificationManager.d.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
