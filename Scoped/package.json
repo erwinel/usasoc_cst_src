@@ -1,10 +1,16 @@
 {
-  "name": "scoped",
-  "version": "0.0.0",
-  "description": "Scoped",
-  "main": "app.js",
+  "name": "usasoc_cst_src-scoped",
+  "version": "0.1.0",
+  "description": "TypeScript source code for scoped server-side USASOC General Customizations application development",
+  "main": "",
   "author": {
-    "name": ""
+    "name": "Leonard T. Erwine"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erwinel/usasoc_cst_src.git",
+    "directory": "Scoped"
   },
   "scripts": {
     "build": "tsc --build",

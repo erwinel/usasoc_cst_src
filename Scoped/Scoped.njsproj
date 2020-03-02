@@ -39,7 +39,7 @@
     <TypeScriptCompile Include="business_rules.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="types\service-now\base.d.ts" />
+    <TypeScriptCompile Include="types\service-now\index.d.ts" />
     <TypeScriptCompile Include="types\service-now\projectManagement.d.ts" />
     <TypeScriptCompile Include="TaskHelper.ts">
       <SubType>Code</SubType>

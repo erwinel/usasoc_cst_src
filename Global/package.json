@@ -1,15 +1,22 @@
 {
-  "name": "global",
-  "version": "0.0.0",
-  "description": "Global",
-  "main": "app.js",
+  "name": "usasoc_cst_src-global",
+  "version": "0.1.0",
+  "description": "TypeScript source code for global server-side USASOC General Customizations application development",
+  "main": "",
   "author": {
-    "name": ""
+    "name": "Leonard T. Erwine"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erwinel/usasoc_cst_src.git",
+    "directory": "Global"
   },
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build --clean"
   },
+  "typeScriptVersion": "2.7",
   "devDependencies": {
     "@types/node": "^8.0.14",
     "typescript": "^3.2.2"

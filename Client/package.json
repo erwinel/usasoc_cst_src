@@ -1,15 +1,22 @@
 {
-  "name": "client",
-  "version": "0.0.0",
-  "description": "Client",
-  "main": "server.js",
+  "name": "usasoc_cst_src-client",
+  "version": "0.1.0",
+  "description": "TypeScript source code for scoped client-side USASOC General Customizations application development",
+  "main": "",
   "author": {
-    "name": ""
+    "name": "Leonard T. Erwine"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erwinel/usasoc_cst_src.git",
+    "directory": "Client"
   },
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build --clean"
   },
+  "typeScriptVersion": "2.7",
   "devDependencies": {
     "@types/angularjs": "^1.5.14-alpha",
     "@types/jquery": "^3.3.33",
