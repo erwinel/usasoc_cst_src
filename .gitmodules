@@ -1,0 +1,9 @@
+[submodule "Client/SnTypings"]
+	path = Client/SnTypings
+	url = https://github.com/erwinel/sn_typings_client_scoped.git
+[submodule "Scoped/SnTypings"]
+	path = Scoped/SnTypings
+	url = https://github.com/erwinel/sn_typings_server_scoped.git
+[submodule "Global/SnTypings"]
+	path = Global/SnTypings
+	url = https://github.com/erwinel/sn_typings_server_global.git
