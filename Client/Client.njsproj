@@ -38,6 +38,7 @@
     <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="types\" />
     <Folder Include="SnTypings\" />
     <Folder Include="SnTypings\ServicePortal\" />
   </ItemGroup>

@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Generic IT Request\" />
+    <Folder Include="types\" />
     <Folder Include="SnTypings\x_44813_phys_net\" />
     <Folder Include="SnTypings\x_44813_sec_clsif\" />
     <Folder Include="SnTypings\" />
