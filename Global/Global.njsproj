@@ -32,9 +32,6 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="USASOCCustomizations.d.ts">
-      <SubType>Code</SubType>
-    </Content>
     <None Include="app.ts" />
     <Content Include="package.json" />
     <Content Include="README.md" />
@@ -46,6 +43,7 @@
     <Folder Include="types\service-now\x_44813_phys_net\" />
     <Folder Include="types\service-now\x_44813_sec_clsif\" />
     <Folder Include="types\service-now\" />
+    <Folder Include="types\service-now\x_44813_usasoc_cst\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Generic IT Request\Initialize Fields.ts">
@@ -62,12 +60,7 @@
     <TypeScriptCompile Include="types\service-now\ServiceCatalog.d.ts" />
     <TypeScriptCompile Include="types\service-now\x_44813_phys_net\index.d.ts" />
     <TypeScriptCompile Include="types\service-now\x_44813_sec_clsif\index.d.ts" />
-    <TypeScriptCompile Include="TaskHelper.d.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="UsasocUserNotificationManager.d.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
+    <TypeScriptCompile Include="types\service-now\x_44813_usasoc_cst\index.d.ts" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
   <ProjectExtensions>

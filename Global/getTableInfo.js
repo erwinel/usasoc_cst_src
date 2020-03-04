@@ -127,4 +127,3 @@ gs.info(["sys_metadata", "sys_db_object", "sys_dictionary", "sys_glide_object", 
     }
     return lines.join("\n");
 }).join("\n"));
-//# sourceMappingURL=getTableInfo.js.map

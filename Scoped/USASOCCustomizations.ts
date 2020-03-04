@@ -25,9 +25,15 @@ interface IUSASOCCustomizations extends ICustomClassBase<IUSASOCCustomizations, 
     getInstanceSdlcStage(): InstanceSdlcStage;
     getNewIdeaAssignmentGroupSysId(): string | undefined;
     getNewIdeaAssignmentGroup(): sys_user_groupGlideRecord | undefined;
+    getDefaultScCatItemApprovalGroupSysId(): string | undefined;
+    getDefaultScCatItemApprovalGroup(): sys_user_groupGlideRecord | undefined;
+    getDefaultScCatItemAssignmentGroup(): sys_user_groupGlideRecord | undefined;
+    getDefaultScCatItemAssignmentGroupSysId(): string | undefined;
 }
 interface IUSASOCCustomizationsPrototype extends ICustomClassPrototype0<IUSASOCCustomizations, IUSASOCCustomizationsPrototype, "USASOCCustomizations">, IUSASOCCustomizations {
     _newIdeaAssignmentGroup?: sys_user_groupGlideRecord | { sys_id: string; }
+    _defaultScCatItemApprovalGroup?: sys_user_groupGlideRecord | { sys_id: string; }
+    _defaultScCatItemAssignmentGroup?: sys_user_groupGlideRecord | { sys_id: string; }
 }
 interface USASOCCustomizations extends Readonly<IUSASOCCustomizations> { }
 interface USASOCCustomizationsConstructor extends CustomClassConstructor0<IUSASOCCustomizations, IUSASOCCustomizationsPrototype, USASOCCustomizations> {
@@ -35,7 +41,10 @@ interface USASOCCustomizationsConstructor extends CustomClassConstructor0<IUSASO
     EVENTNAME_TASK_IDEA_NEW: "x_44813_usasoc_cst.idea.new";
     PROPERTY_CATEGORY: "USASOC Customization Settings";
     PROPERTYNAME_INSTANCE_SDLC_STAGE: "x_44813_usasoc_cst.instance_sdlc_stage";
+    PROPERTYNAME_DEFAULT_GIT_INSTANCE_BASE_URL: "x_44813_usasoc_cst.default_git_instance_base_url";
     PROPERTYNAME_NEW_IDEA_ASSIGNMENT_GROUP: "x_44813_usasoc_cst.new_idea_assignment_group";
+    PROPERTYNAME_DEFAULT_SC_CAT_APPROVER_GROUP: "x_44813_usasoc_cst.default_sc_cat_approver_group";
+    PROPERTYNAME_DEFAULT_SC_CAT_ASSIGNMENT_GROUP: "default_sc_cat_assignment_group";
     new(): USASOCCustomizations;
     (): USASOCCustomizations;
 }
@@ -47,7 +56,9 @@ const USASOCCustomizations: Readonly<USASOCCustomizationsConstructor> & { new():
     usasocCustomizationsConstructor.PROPERTY_CATEGORY = "USASOC Customization Settings";
     usasocCustomizationsConstructor.PROPERTYNAME_INSTANCE_SDLC_STAGE = "x_44813_usasoc_cst.instance_sdlc_stage";
     usasocCustomizationsConstructor.PROPERTYNAME_NEW_IDEA_ASSIGNMENT_GROUP = "x_44813_usasoc_cst.new_idea_assignment_group";
-
+    usasocCustomizationsConstructor.PROPERTYNAME_DEFAULT_GIT_INSTANCE_BASE_URL = "x_44813_usasoc_cst.default_git_instance_base_url";
+    usasocCustomizationsConstructor.PROPERTYNAME_DEFAULT_SC_CAT_APPROVER_GROUP = "x_44813_usasoc_cst.default_sc_cat_approver_group";
+    usasocCustomizationsConstructor.PROPERTYNAME_DEFAULT_SC_CAT_ASSIGNMENT_GROUP = "default_sc_cat_assignment_group";
     usasocCustomizationsConstructor.prototype = {
         initialize: function (this: IUSASOCCustomizationsPrototype): void {
         },
@@ -71,7 +82,7 @@ const USASOCCustomizations: Readonly<USASOCCustomizationsConstructor> & { new():
         getNewIdeaAssignmentGroup: function (this: IUSASOCCustomizationsPrototype): sys_user_groupGlideRecord | undefined {
             var sys_id: string = this.getNewIdeaAssignmentGroupSysId();
             if (typeof sys_id == "string" && (typeof this._newIdeaAssignmentGroup === "undefined" || this._newIdeaAssignmentGroup.sys_id != sys_id)) {
-                var gr: sys_user_groupGlideRecord = <sys_user_groupGlideRecord>new GlideRecord("");
+                var gr: sys_user_groupGlideRecord = <sys_user_groupGlideRecord>new GlideRecord("sys_user_group");
                 gr.addQuery(sys_id);
                 gr.query();
                 if (gr.next())
@@ -81,6 +92,44 @@ const USASOCCustomizations: Readonly<USASOCCustomizationsConstructor> & { new():
             }
             if (typeof this._newIdeaAssignmentGroup === "object" && this._newIdeaAssignmentGroup instanceof GlideRecord)
                 return this._newIdeaAssignmentGroup;
+        },
+        getDefaultScCatItemApprovalGroupSysId: function (this: IUSASOCCustomizationsPrototype): string | undefined {
+            var result: string = gs.getProperty(USASOCCustomizations.PROPERTYNAME_DEFAULT_SC_CAT_APPROVER_GROUP, "");
+            if (result.length > 0)
+                return result;
+        },
+        getDefaultScCatItemApprovalGroup: function (this: IUSASOCCustomizationsPrototype): sys_user_groupGlideRecord | undefined {
+            var sys_id: string = this.getDefaultScCatItemApprovalGroupSysId();
+            if (typeof sys_id == "string" && (typeof this._defaultScCatItemApprovalGroup === "undefined" || this._defaultScCatItemApprovalGroup.sys_id != sys_id)) {
+                var gr: sys_user_groupGlideRecord = <sys_user_groupGlideRecord>new GlideRecord("sys_user_group");
+                gr.addQuery(sys_id);
+                gr.query();
+                if (gr.next())
+                    this._defaultScCatItemApprovalGroup = gr;
+                else
+                    this._defaultScCatItemApprovalGroup = { sys_id: sys_id };
+            }
+            if (typeof this._defaultScCatItemApprovalGroup === "object" && this._defaultScCatItemApprovalGroup instanceof GlideRecord)
+                return this._defaultScCatItemApprovalGroup;
+        },
+        getDefaultScCatItemAssignmentGroupSysId: function (this: IUSASOCCustomizationsPrototype): string | undefined {
+            var result: string = gs.getProperty(USASOCCustomizations.PROPERTYNAME_DEFAULT_SC_CAT_ASSIGNMENT_GROUP, "");
+            if (result.length > 0)
+                return result;
+        },
+        getDefaultScCatItemAssignmentGroup: function (this: IUSASOCCustomizationsPrototype): sys_user_groupGlideRecord | undefined {
+            var sys_id: string = this.getDefaultScCatItemAssignmentGroupSysId();
+            if (typeof sys_id == "string" && (typeof this._defaultScCatItemAssignmentGroup === "undefined" || this._defaultScCatItemApprovalGroup.sys_id != sys_id)) {
+                var gr: sys_user_groupGlideRecord = <sys_user_groupGlideRecord>new GlideRecord("sys_user_group");
+                gr.addQuery(sys_id);
+                gr.query();
+                if (gr.next())
+                    this._defaultScCatItemAssignmentGroup = gr;
+                else
+                    this._defaultScCatItemAssignmentGroup = { sys_id: sys_id };
+            }
+            if (typeof this._defaultScCatItemAssignmentGroup === "object" && this._defaultScCatItemAssignmentGroup instanceof GlideRecord)
+                return this._defaultScCatItemAssignmentGroup;
         },
         type: "USASOCCustomizations"
     };

@@ -19,4 +19,3 @@ var usasoc_task_submitted;
             gs.eventQueue(USASOCCustomizations.EVENTNAME_TASK_IDEA_NEW, current);
     }
 })(usasoc_task_submitted || (usasoc_task_submitted = {}));
-//# sourceMappingURL=business_rules.js.map

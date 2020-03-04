@@ -4,12 +4,13 @@
     "module": "none",
     "target": "es3",
     "lib": [ "es2015" ],
-    "sourceMap": true
+    "declaration":  true
   },
   "exclude": [
     "node_modules",
     "**/*.spec.ts",
     "**/types/service-now/app.*",
-    "**/*.js"
+    "**/*.js",
+    "types/service-now/x_44813_usasoc_cst/**/*"
   ]
 }

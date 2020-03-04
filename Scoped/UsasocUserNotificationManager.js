@@ -161,4 +161,3 @@ var UsasocUserNotificationManager = (function () {
     };
     return UsasocUserNotificationManagerConstructor;
 })();
-//# sourceMappingURL=UsasocUserNotificationManager.js.map
