@@ -4,13 +4,15 @@
     "module": "none",
     "target": "es3",
     "lib": [ "es2015" ],
-    "declaration":  true
+    "declaration":  true,
+    "typeRoots": [ "./node_modules/@types", "./types" ]
   },
   "exclude": [
     "node_modules",
     "**/*.spec.ts",
-    "**/types/service-now/app.*",
     "**/*.js",
+    "./app.*",
+    "types/service-now/*/app.*",
     "types/service-now/x_44813_usasoc_cst/**/*"
   ]
 }
