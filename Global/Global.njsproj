@@ -52,6 +52,7 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="getTableInfo.ts" />
+    <TypeScriptCompile Include="types\index.d.ts" />
     <TypeScriptCompile Include="types\service-now\CMDB.d.ts" />
     <TypeScriptCompile Include="types\service-now\DictionaryBase.d.ts" />
     <TypeScriptCompile Include="types\service-now\GlideBase.d.ts" />

@@ -1,4 +1,4 @@
-/// <reference path="types/service-now/index.d.ts" />
+/// <reference path="types/index.d.ts" />
 var internalTypeToClassNameMapping = {
     "boolean": "GlideElementBoolean", "catalog_preview": "GlideElement", "choice": "GlideElement", "color": "GlideElement", "composite_field": "GlideElement",
     "compressed": "GlideElementCompressed", "conditions": "GlideElementConditions", "currency": "GlideElementCurrency", "data_object": "GlideElementDataObject", "decimal": "GlideElementNumeric",

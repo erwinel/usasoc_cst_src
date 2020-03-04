@@ -48,6 +48,7 @@
     <TypeScriptCompile Include="Generic IT Request.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="types\index.d.ts" />
     <TypeScriptCompile Include="types\service-now\base.d.ts" />
     <TypeScriptCompile Include="types\service-now\index.d.ts">
       <SubType>Code</SubType>
@@ -59,7 +60,7 @@
     <TypeScriptCompile Include="types\service-now\js_includes_listv2_doctype.d.ts" />
     <TypeScriptCompile Include="types\service-now\js_includes_ui16_form.d.ts" />
     <TypeScriptCompile Include="types\service-now\ServicePortal\index.d.ts" />
-    <TypeScriptCompile Include="types\service-now\ServicePortal\spUtil.ts" />
+    <TypeScriptCompile Include="types\service-now\ServicePortal\spUtil.d.ts" />
     <TypeScriptCompile Include="UsasocUserNotificationManager.d.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

@@ -1,4 +1,4 @@
-/// <reference path="types/service-now/index.d.ts" />
+/// <reference path="types/index.d.ts" />
 var TaskHelper = (function () {
     var taskHelperConstructor = Class.create();
     function getCaller(task) {
@@ -45,8 +45,127 @@ var TaskHelper = (function () {
         var caller = getCaller(task);
         return typeof caller !== 'undefined' && caller.vip == true;
     }
+    function isBusinessUnit(target) {
+        return typeof target === 'object' && null != target && target.getTableName && target.getTableName() == 'business_unit';
+    }
+    function isDepartment(target) {
+        return typeof target === 'object' && null != target && target.getTableName && target.getTableName() == 'cmn_department';
+    }
+    function isUser(target) {
+        return typeof target === 'object' && null != target && target.getTableName && target.getTableName() == 'sys_user';
+    }
+    function isCompany(target) {
+        return typeof target === 'object' && null != target && target.getTableName && target.getTableName() == 'core_company';
+    }
+    function isLocation(target) {
+        return typeof target === 'object' && null != target && target.getTableName && target.getTableName() == 'cmn_location';
+    }
+    function isBuilding(target) {
+        return typeof target === 'object' && null != target && target.getTableName && target.getTableName() == 'cmn_building';
+    }
+    function getBusinessUnit(target) {
+        if (isUser(target))
+            return getBusinessUnit(target.department);
+        if (isDepartment(target)) {
+            if (gs.nil(target.business_unit))
+                return getBusinessUnit(target.parent);
+            return target.business_unit;
+        }
+    }
+    function getCompany(target) {
+        if (isCompany(target))
+            return target;
+        if (isUser(target)) {
+            if (!gs.nil(target.company))
+                return target.company;
+            return getCompany(target.department);
+        }
+        if (isBusinessUnit(target))
+            return getCompany(target.parent);
+        if (isDepartment(target)) {
+            var result = getCompany(target.business_unit);
+            if (gs.nil(result))
+                return getCompany(target.parent);
+            return result;
+        }
+    }
+    function getLocation(target) {
+        if (isLocation(target))
+            return target;
+        if (isUser(target)) {
+            if (!gs.nil(target.location))
+                return target.location;
+            return getLocation(target.building);
+        }
+        else if (isBuilding(target)) {
+            if (!gs.nil(target.location))
+                return target.location;
+        }
+    }
+    function getSysId(target) {
+        if (!gs.nil(target)) {
+            var sys_id = target.sys_id;
+            if (!gs.nil(sys_id)) {
+                if ((sys_id = '' + sys_id).length > 0)
+                    return sys_id;
+            }
+            if ((sys_id = '' + target).length > 0 && sys_id.match(/^[a-fA-F\d]{32}$/))
+                return target;
+        }
+    }
+    function getDefaultApprovalGroupByLocation(user) {
+        var rules = TaskHelper.getLocationApproverRules();
+        var bld = getSysId(user.building);
+        var bu = getSysId(getBusinessUnit(user));
+        var c = getSysId(getCompany(user));
+        var d = getSysId(user.department);
+        var l = getSysId(getLocation(user));
+        for (var index = 0; index < rules.length; index++) {
+            var r = rules[index];
+            if (r.type == "any") {
+                if ((typeof r.building !== 'undefined' && r.building == bld) || (typeof r.business_unit !== 'undefined' && r.business_unit == bu) ||
+                    (typeof r.company !== 'undefined' && r.company == c) || (typeof r.department !== 'undefined' && r.department == d) ||
+                    (typeof r.location !== 'undefined' && r.location == l))
+                    return r.approval_group;
+            }
+            else if ((typeof r.building !== 'undefined' || r.building == bld) && (typeof r.business_unit !== 'undefined' || r.business_unit == bu) &&
+                (typeof r.company !== 'undefined' || r.company == c) && (typeof r.department !== 'undefined' || r.department == d) &&
+                (typeof r.location !== 'undefined' || r.location == l))
+                return r.approval_group;
+        }
+    }
     taskHelperConstructor.getCaller = getCaller;
     taskHelperConstructor.isVip = isVip;
+    taskHelperConstructor.getDefaultApprovalGroupByLocation = getDefaultApprovalGroupByLocation;
+    taskHelperConstructor.getLocationApproverRules = function () {
+        if (typeof taskHelperConstructor._locationApproverRules !== 'undefined')
+            return taskHelperConstructor._locationApproverRules;
+        taskHelperConstructor._locationApproverRules = [];
+        var gr = new GlideRecord('x_44813_usasoc_cst_location_approvers');
+        gr.orderBy('order');
+        gr.query();
+        while (gr.next()) {
+            var item = {
+                approval_group: gr.approval_group,
+                type: ('' + gr.type)
+            };
+            item.business_unit;
+            item.company;
+            item.department;
+            if (!gs.nil(gr.building))
+                item.building = '' + gr.building.sys_id;
+            if (!gs.nil(gr.location))
+                item.location = '' + gr.location.sys_id;
+            if (!gs.nil(gr.department))
+                item.department = '' + gr.department.sys_id;
+            if (!gs.nil(gr.business_unit))
+                item.business_unit = '' + gr.business_unit.sys_id;
+            if (!gs.nil(gr.company))
+                item.company = '' + gr.company.sys_id;
+            taskHelperConstructor._locationApproverRules.push(item);
+        }
+        return taskHelperConstructor._locationApproverRules;
+    };
     taskHelperConstructor.prototype = {
         _task: undefined,
         initialize: function (task) {
@@ -90,6 +209,9 @@ var TaskHelper = (function () {
         },
         isVip: function () {
             return isVip(this._task);
+        },
+        getDefaultApprovalGroupByCallerLocation: function () {
+            return getDefaultApprovalGroupByLocation(this.getCaller());
         },
         type: 'TaskHelper'
     };

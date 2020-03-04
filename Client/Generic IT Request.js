@@ -1,4 +1,4 @@
-/// <reference path="types/service-now/index.d.ts" />
+/// <reference path="types/index.d.ts" />
 var generic_it_request;
 (function (generic_it_request) {
     function read_only_after_approve() {

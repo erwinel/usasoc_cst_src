@@ -1,4 +1,4 @@
-/// <reference path="types/service-now/index.d.ts" />
+/// <reference path="types/index.d.ts" />
 
 let internalTypeToClassNameMapping: { [key: string]: string; } = {
     "boolean": "GlideElementBoolean", "catalog_preview": "GlideElement", "choice": "GlideElement", "color": "GlideElement", "composite_field": "GlideElement",

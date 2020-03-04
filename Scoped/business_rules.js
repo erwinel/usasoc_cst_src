@@ -1,4 +1,4 @@
-/// <reference path="types/service-now/index.d.ts" />
+/// <reference path="types/index.d.ts" />
 /// <reference path="USASOCCustomizations.ts" />
 var usasoc_idea_submitting;
 (function (usasoc_idea_submitting) {

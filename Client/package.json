@@ -18,9 +18,9 @@
   },
   "typeScriptVersion": "2.7",
   "devDependencies": {
-    "@types/angularjs": "^1.5.14-alpha",
+    "@types/angular": "^1.6.57",
     "@types/jquery": "^3.3.33",
     "@types/node": "^8.0.14",
-    "typescript": "^3.2.2"
+    "typescript": "^3.8.3"
   }
 }

@@ -1,3 +1,4 @@
+/// <reference path="../types/index.d.ts" />
 var generic_it_request;
 (function (generic_it_request) {
     function initialize_fields(current) {
@@ -80,19 +81,19 @@ var generic_it_request;
         gs.eventQueue('army.generic.request.route', current, '' + task.number);
     }
     function request_item_assigned(current) {
-var answer = ifScript();
-function ifScript() {
-    if (gs.nil(current.assignment_group) && gs.nil(current.assigned_to)) {
-        if (gs.nil(current.variables.assignment_group)) {
-            if (gs.nil(current.cat_item.group))
-                return 'no';
-            current.variables.assignment_group = current.cat_item.group;
+        var answer = ifScript();
+        function ifScript() {
+            if (gs.nil(current.assignment_group) && gs.nil(current.assigned_to)) {
+                if (gs.nil(current.variables.assignment_group)) {
+                    if (gs.nil(current.cat_item.group))
+                        return 'no';
+                    current.variables.assignment_group = current.cat_item.group;
+                }
+                else
+                    current.assignment_group = current.variables.assignment_group;
+            }
+            return 'yes';
         }
-        else
-            current.assignment_group = current.variables.assignment_group;
-    }
-    return 'yes';
-}
     }
 })(generic_it_request || (generic_it_request = {}));
 //# sourceMappingURL=Initialize Fields.js.map

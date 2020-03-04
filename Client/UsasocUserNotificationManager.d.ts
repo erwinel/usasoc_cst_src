@@ -1,4 +1,5 @@
-/// <reference path="types/service-now/index.d.ts" />
+/// <reference path="types/index.d.ts" />
+
 interface IUsasocUserNotificationManagerResponse {
     code: number;
     user_id: string;

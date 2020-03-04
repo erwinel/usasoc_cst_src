@@ -1,4 +1,4 @@
-/// <reference path="types/service-now/index.d.ts" />
+/// <reference path="types/index.d.ts" />
 
 declare namespace x_44813_usasoc_cst {
     export interface IUsasocUserNotificationManagerResponse {

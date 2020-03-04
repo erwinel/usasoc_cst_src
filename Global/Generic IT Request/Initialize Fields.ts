@@ -1,3 +1,5 @@
+/// <reference path="../types/index.d.ts" />
+
 namespace generic_it_request {
 	type sys_user_groupReference = $$element.Reference<sys_user_groupFields, sys_user_groupGlideRecord>;
 	type sc_cat_itemReference = $$element.Reference<sc_cat_itemFields, sc_cat_itemGlideRecord>;
