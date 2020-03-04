@@ -35,13 +35,6 @@ const TaskHelper: Readonly<TaskHelperConstructor> & { new(task: string | taskFie
     var taskHelperConstructor: TaskHelperConstructor & { _locationApproverRules?: IRuleCacheItem[]; } = Class.create();
 
     function getCaller(task: taskFields): sys_userFields {
-        /*
-            .Feedback[Knowledge Feedback Task]User VIP = true
-            .Request[Requested Item]Requested for VIP = true
-            .Incident[Security Incident]Caller VIP = true
-            .Affected user[Security Incident Response Task]VIP = true
-                .Caller[Service Order]VIP = true
-        */
         var caller: sys_userFields;
         switch ('' + task.sys_class_name) {
             case 'incident':
@@ -53,11 +46,13 @@ const TaskHelper: Readonly<TaskHelperConstructor> & { new(task: string | taskFie
             case 'incident_task':
                 caller = <sys_userFields>(<incidentFields>(<incident_taskFields>task).incident).caller_id;
                 break;
-            case 'kb_feedback_task':
-                break;
+            case 'sm_order':
             case 'sn_si_incident':
+                caller = <sys_userFields>((gs.nil((<sm_orderFields>task).opened_for)) ? (<sm_orderFields>task).caller : (<sm_orderFields>task).opened_for);
                 break;
             case 'sn_si_task':
+                if (!gs.nil((<{ affected_user: sys_userFields }><any>task).affected_user))
+                    caller = (<{ affected_user: sys_userFields }><any>task).affected_user;
                 break;
             case 'sm_task':
                 break;
@@ -65,10 +60,8 @@ const TaskHelper: Readonly<TaskHelperConstructor> & { new(task: string | taskFie
                 caller = <sys_userFields>(<sc_requestFields>task).requested_for;
                 break;
             case 'sc_req_item':
-                caller = <sys_userFields>(<sc_requestFields>(<sc_req_itemFields>task).request).requested_for;
-                break;
             case 'sc_task':
-                caller = <sys_userFields>(<sc_requestFields>(<sc_taskFields>task).request).requested_for;
+                caller = <sys_userFields>(<sc_requestFields>(<sc_req_itemFields | sc_taskFields>task).request).requested_for;
                 break;
         }
         if (!gs.nil(caller))
@@ -194,9 +187,6 @@ const TaskHelper: Readonly<TaskHelperConstructor> & { new(task: string | taskFie
                 approval_group: <sys_user_groupFields>gr.approval_group,
                 type: <USASOC_CST_LOCATION_APPROVERS_TYPE>('' + gr.type)
             };
-            item.business_unit;
-            item.company;
-            item.department;
             if (!gs.nil(gr.building))
                 item.building = '' + (<cmn_buildingFields>gr.building).sys_id;
             if (!gs.nil(gr.location))
@@ -211,7 +201,6 @@ const TaskHelper: Readonly<TaskHelperConstructor> & { new(task: string | taskFie
         }
         return taskHelperConstructor._locationApproverRules;
     };
-
     taskHelperConstructor.prototype = {
         _task: undefined,
         initialize: function (this: ITaskHelperPrototype, task: string | taskFields) {

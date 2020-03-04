@@ -2,13 +2,6 @@
 var TaskHelper = (function () {
     var taskHelperConstructor = Class.create();
     function getCaller(task) {
-        /*
-            .Feedback[Knowledge Feedback Task]User VIP = true
-            .Request[Requested Item]Requested for VIP = true
-            .Incident[Security Incident]Caller VIP = true
-            .Affected user[Security Incident Response Task]VIP = true
-                .Caller[Service Order]VIP = true
-        */
         var caller;
         switch ('' + task.sys_class_name) {
             case 'incident':
@@ -20,11 +13,13 @@ var TaskHelper = (function () {
             case 'incident_task':
                 caller = task.incident.caller_id;
                 break;
-            case 'kb_feedback_task':
-                break;
+            case 'sm_order':
             case 'sn_si_incident':
+                caller = ((gs.nil(task.opened_for)) ? task.caller : task.opened_for);
                 break;
             case 'sn_si_task':
+                if (!gs.nil(task.affected_user))
+                    caller = task.affected_user;
                 break;
             case 'sm_task':
                 break;
@@ -32,8 +27,6 @@ var TaskHelper = (function () {
                 caller = task.requested_for;
                 break;
             case 'sc_req_item':
-                caller = task.request.requested_for;
-                break;
             case 'sc_task':
                 caller = task.request.requested_for;
                 break;
@@ -149,9 +142,6 @@ var TaskHelper = (function () {
                 approval_group: gr.approval_group,
                 type: ('' + gr.type)
             };
-            item.business_unit;
-            item.company;
-            item.department;
             if (!gs.nil(gr.building))
                 item.building = '' + gr.building.sys_id;
             if (!gs.nil(gr.location))
