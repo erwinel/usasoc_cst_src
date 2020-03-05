@@ -1,6 +1,49 @@
 /// <reference path="types/index.d.ts" />
 var TaskHelper = (function () {
     var taskHelperConstructor = Class.create();
+    taskHelperConstructor.TASKSTATE_PENDING = -5;
+    taskHelperConstructor.TASKSTATE_OPEN = 1;
+    taskHelperConstructor.TASKSTATE_WORK_IN_PROGRESS = 2;
+    taskHelperConstructor.TASKSTATE_CLOSED_COMPLETE = 3;
+    taskHelperConstructor.TASKSTATE_CLOSED_INCOMPLETE = 4;
+    taskHelperConstructor.TASKSTATE_CLOSED_SKIPPED = 7;
+    taskHelperConstructor.TASKAPPPROVAL_NOT_REQUESTED = "not requested";
+    taskHelperConstructor.TASKAPPPROVAL_REQUESTED = "requested";
+    taskHelperConstructor.TASKAPPPROVAL_NOT_REQUIRED = "not_required";
+    taskHelperConstructor.TASKAPPPROVAL_APPROVED = "approved";
+    taskHelperConstructor.TASKAPPPROVAL_REJECTED = "rejected";
+    taskHelperConstructor.TASKAPPPROVAL_CANCELLED = "cancelled";
+    taskHelperConstructor.TASKAPPPROVAL_DUPLICATE = "duplicate";
+    function isClosed(task) {
+        return !gs.nil(task) && task.state >= TaskHelper.TASKSTATE_CLOSED_COMPLETE;
+    }
+    function isPending(task) {
+        return !gs.nil(task) && task.state <= TaskHelper.TASKSTATE_PENDING;
+    }
+    function isPendingOrClosed(task) {
+        return !gs.nil(task) && (task.state >= TaskHelper.TASKSTATE_CLOSED_COMPLETE || task.state <= TaskHelper.TASKSTATE_PENDING);
+    }
+    function isInProgress(task) {
+        return !gs.nil(task) && task.state == TaskHelper.TASKSTATE_WORK_IN_PROGRESS;
+    }
+    function isInProgressOrPending(task) {
+        return !gs.nil(task) && (task.state == TaskHelper.TASKSTATE_WORK_IN_PROGRESS || task.state <= TaskHelper.TASKSTATE_PENDING);
+    }
+    function isClosedComplete(task) {
+        return !gs.nil(task) && task.state == TaskHelper.TASKSTATE_CLOSED_COMPLETE;
+    }
+    function isPreApproval(task) {
+        return !gs.nil(task) && (task.approval == TaskHelper.TASKAPPPROVAL_REQUESTED || task.approval == TaskHelper.TASKAPPPROVAL_NOT_REQUESTED);
+    }
+    function isApprovedOrNotRequired(task) {
+        return !gs.nil(task) && (task.approval == TaskHelper.TASKAPPPROVAL_APPROVED || task.approval == TaskHelper.TASKAPPPROVAL_NOT_REQUIRED);
+    }
+    function isUnapproved(task) {
+        return !gs.nil(task) && (task.approval == TaskHelper.TASKAPPPROVAL_REJECTED || task.approval == TaskHelper.TASKAPPPROVAL_CANCELLED || task.approval == TaskHelper.TASKAPPPROVAL_DUPLICATE);
+    }
+    function isRejectedOrDuplicate(task) {
+        return !gs.nil(task) && (task.approval == TaskHelper.TASKAPPPROVAL_REJECTED || task.approval == TaskHelper.TASKAPPPROVAL_DUPLICATE);
+    }
     function getCaller(task) {
         var caller;
         switch ('' + task.sys_class_name) {
@@ -203,6 +246,16 @@ var TaskHelper = (function () {
         getDefaultApprovalGroupByCallerLocation: function () {
             return getDefaultApprovalGroupByLocation(this.getCaller());
         },
+        isClosed: function () { return isClosed(this._task); },
+        isPending: function () { return isPending(this._task); },
+        isPendingOrClosed: function () { return isPendingOrClosed(this._task); },
+        isInProgress: function () { return isInProgress(this._task); },
+        isInProgressOrPending: function () { return isInProgressOrPending(this._task); },
+        isClosedComplete: function () { return isClosedComplete(this._task); },
+        isPreApproval: function () { return isPreApproval(this._task); },
+        isApprovedOrNotRequired: function () { return isApprovedOrNotRequired(this._task); },
+        isUnapproved: function () { return isUnapproved(this._task); },
+        isRejectedOrDuplicate: function () { return isRejectedOrDuplicate(this._task); },
         type: 'TaskHelper'
     };
     return taskHelperConstructor;

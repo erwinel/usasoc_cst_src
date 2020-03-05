@@ -42,11 +42,15 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="types\index.d.ts" />
+    <TypeScriptCompile Include="types\service-now\Glide.d.ts" />
+    <TypeScriptCompile Include="types\service-now\Global.d.ts" />
     <TypeScriptCompile Include="types\service-now\index.d.ts" />
     <TypeScriptCompile Include="types\service-now\projectManagement.d.ts" />
     <TypeScriptCompile Include="TaskHelper.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="types\service-now\Rhino.d.ts" />
+    <TypeScriptCompile Include="types\service-now\Tables.d.ts" />
     <TypeScriptCompile Include="USASOCCustomizations.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
