@@ -17,25 +17,13 @@ interface ITaskHelper extends ICustomClassBase<ITaskHelper, "TaskHelper"> {
      */
     isClosed(): boolean;
     /**
-     * Indicates whether a task is in the pending state.
-     */
-    isPending(): boolean;
-    /**
      * Indicates whether a task is in one of the closed states or is in the pending state.
      */
     isPendingOrClosed(): boolean;
     /**
-     * Indicates whether a task is in the in-progress state.
-     */
-    isInProgress(): boolean;
-    /**
      * Indicates whether a task is in the in-progress or pending state.
      */
     isInProgressOrPending(): boolean;
-    /**
-     * Indicates whether a task is in the closed-complete state.
-     */
-    isClosedComplete(): boolean;
     /**
      * Indicates whether a task awaiting approval or approval has not been requested.
      */
@@ -52,6 +40,66 @@ interface ITaskHelper extends ICustomClassBase<ITaskHelper, "TaskHelper"> {
      * Indicates whether a task approval status is rejected or it is marked as duplicate.
      */
     isRejectedOrDuplicate(): boolean;
+    /**
+     * Indicates whether a task is in the pending state.
+     */
+    isPending(): boolean;
+    /**
+     * Indicates whether a task is in the open state.
+     */
+    isOpen(): boolean;
+    /**
+     * Indicates whether a task is in the in-progress state.
+     */
+    isInProgress(): boolean;
+    /**
+     * Indicates whether a task is in the closed-complete state.
+     */
+    isClosedComplete(): boolean;
+    /**
+     * Indicates whether a task is in the closed-incomplete state.
+     */
+    isClosedIncomplete(): boolean;
+    /**
+     * Indicates whether a task is in the closed-skipped state.
+     */
+    isClosedSkipped(): boolean;
+    /**
+     * Sets the status to pending.
+     * @param {boolean} [force] if true, set status to pending even if it is in a closed state.
+     * @returns {boolean} true if the status was changed; otherwise, false.
+     */
+    setPending(force?: boolean): boolean;
+    /**
+     * Sets the status to open.
+     * @param {boolean} [force] if true, set status to open even if it is in a closed state.
+     * @returns {boolean} true if the status was changed; otherwise, false.
+     */
+    setOpen(force?: boolean): boolean;
+    /**
+     * Sets the status to work-in-progress.
+     * @param {boolean} [force] if true, set status to work-in-progress even if it is in a closed state.
+     * @returns {boolean} true if the status was changed; otherwise, false.
+     */
+    setInProgress(force?: boolean): boolean;
+    /**
+     * Sets the status to closed-complete.
+     * @param {boolean} [force] if true, set status to closed-complete even if it is already in a closed state.
+     * @returns {boolean} true if the status was changed; otherwise, false.
+     */
+    setClosedComplete(force?: boolean): boolean;
+    /**
+     * Sets the status to closed-incomplete.
+     * @param {boolean} [force] if true, set status to closed-incomplete even if it is already in a closed state.
+     * @returns {boolean} true if the status was changed; otherwise, false.
+     */
+    setClosedIncomplete(force?: boolean): boolean;
+    /**
+     * Sets the status to closed-skipped.
+     * @param {boolean} [force] if true, set status to closed-skipped even if it is already in a closed state.
+     * @returns {boolean} true if the status was changed; otherwise, false.
+     */
+    setClosedSkipped(force?: boolean): boolean;
 }
 interface ITaskHelperPrototype extends ICustomClassPrototype1<ITaskHelper, ITaskHelperPrototype, "TaskHelper", string>, ITaskHelper {
     _task: taskGlideRecord;

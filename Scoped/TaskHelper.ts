@@ -18,25 +18,13 @@ interface ITaskHelper extends ICustomClassBase<ITaskHelper, "TaskHelper"> {
      */
     isClosed(): boolean;
     /**
-     * Indicates whether a task is in the pending state.
-     */
-    isPending(): boolean;
-    /**
      * Indicates whether a task is in one of the closed states or is in the pending state.
      */
     isPendingOrClosed(): boolean;
     /**
-     * Indicates whether a task is in the in-progress state.
-     */
-    isInProgress(): boolean;
-    /**
      * Indicates whether a task is in the in-progress or pending state.
      */
     isInProgressOrPending(): boolean;
-    /**
-     * Indicates whether a task is in the closed-complete state.
-     */
-    isClosedComplete(): boolean;
     /**
      * Indicates whether a task awaiting approval or approval has not been requested.
      */
@@ -53,6 +41,66 @@ interface ITaskHelper extends ICustomClassBase<ITaskHelper, "TaskHelper"> {
      * Indicates whether a task approval status is rejected or it is marked as duplicate.
      */
     isRejectedOrDuplicate(): boolean;
+    /**
+     * Indicates whether a task is in the pending state.
+     */
+    isPending(): boolean;
+    /**
+     * Indicates whether a task is in the open state.
+     */
+    isOpen(): boolean;
+    /**
+     * Indicates whether a task is in the in-progress state.
+     */
+    isInProgress(): boolean;
+    /**
+     * Indicates whether a task is in the closed-complete state.
+     */
+    isClosedComplete(): boolean;
+    /**
+     * Indicates whether a task is in the closed-incomplete state.
+     */
+    isClosedIncomplete(): boolean;
+    /**
+     * Indicates whether a task is in the closed-skipped state.
+     */
+    isClosedSkipped(): boolean;
+    /**
+     * Sets the status to pending.
+     * @param {boolean} [force] if true, set status to pending even if it is in a closed state.
+     * @returns {boolean} true if the status was changed; otherwise, false.
+     */
+    setPending(force?: boolean): boolean;
+    /**
+     * Sets the status to open.
+     * @param {boolean} [force] if true, set status to open even if it is in a closed state.
+     * @returns {boolean} true if the status was changed; otherwise, false.
+     */
+    setOpen(force?: boolean): boolean;
+    /**
+     * Sets the status to work-in-progress.
+     * @param {boolean} [force] if true, set status to work-in-progress even if it is in a closed state.
+     * @returns {boolean} true if the status was changed; otherwise, false.
+     */
+    setInProgress(force?: boolean): boolean;
+    /**
+     * Sets the status to closed-complete.
+     * @param {boolean} [force] if true, set status to closed-complete even if it is already in a closed state.
+     * @returns {boolean} true if the status was changed; otherwise, false.
+     */
+    setClosedComplete(force?: boolean): boolean;
+    /**
+     * Sets the status to closed-incomplete.
+     * @param {boolean} [force] if true, set status to closed-incomplete even if it is already in a closed state.
+     * @returns {boolean} true if the status was changed; otherwise, false.
+     */
+    setClosedIncomplete(force?: boolean): boolean;
+    /**
+     * Sets the status to closed-skipped.
+     * @param {boolean} [force] if true, set status to closed-skipped even if it is already in a closed state.
+     * @returns {boolean} true if the status was changed; otherwise, false.
+     */
+    setClosedSkipped(force?: boolean): boolean;
 }
 
 interface ITaskHelperPrototype extends ICustomClassPrototype1<ITaskHelper, ITaskHelperPrototype, "TaskHelper", string>, ITaskHelper {
@@ -139,7 +187,51 @@ const TaskHelper: Readonly<TaskHelperConstructor> & { new(task: string | taskFie
     function isRejectedOrDuplicate(task: taskFields): boolean {
         return !gs.nil(task) && (task.approval == TaskHelper.TASKAPPPROVAL_REJECTED || task.approval == TaskHelper.TASKAPPPROVAL_DUPLICATE);
     }
-
+    function isOpen(task: taskFields): boolean {
+        return !gs.nil(task) && task.state == TaskHelper.TASKSTATE_OPEN;
+    }
+    function isClosedIncomplete(task: taskFields): boolean {
+        return !gs.nil(task) && task.state == TaskHelper.TASKSTATE_CLOSED_INCOMPLETE;
+    }
+    function isClosedSkipped(task: taskFields): boolean {
+        return !gs.nil(task) && task.state == TaskHelper.TASKSTATE_CLOSED_SKIPPED;
+    }
+    function setPending(task: taskFields, force?: boolean): boolean {
+        if (gs.nil(task) || task.state == TaskHelper.TASKSTATE_PENDING || (task.state > TaskHelper.TASKSTATE_WORK_IN_PROGRESS && !force))
+            return false;
+        task.state = TaskHelper.TASKSTATE_PENDING;
+        return true;
+    }
+    function setOpen(task: taskFields, force?: boolean): boolean {
+        if (gs.nil(task) || task.state == TaskHelper.TASKSTATE_OPEN || (task.state > TaskHelper.TASKSTATE_WORK_IN_PROGRESS && !force))
+            return false;
+        task.state = TaskHelper.TASKSTATE_OPEN;
+        return true;
+    }
+    function setInProgress(task: taskFields, force?: boolean): boolean {
+        if (gs.nil(task) || task.state == TaskHelper.TASKSTATE_WORK_IN_PROGRESS || (task.state > TaskHelper.TASKSTATE_WORK_IN_PROGRESS && !force))
+            return false;
+        task.state = TaskHelper.TASKSTATE_WORK_IN_PROGRESS;
+        return true;
+    }
+    function setClosedComplete(task: taskFields, force?: boolean): boolean {
+        if (gs.nil(task) || task.state == TaskHelper.TASKSTATE_CLOSED_COMPLETE || (task.state > TaskHelper.TASKSTATE_WORK_IN_PROGRESS && !force))
+            return false;
+        task.state = TaskHelper.TASKSTATE_CLOSED_COMPLETE;
+        return true;
+    }
+    function setClosedIncomplete(task: taskFields, force?: boolean): boolean {
+        if (gs.nil(task) || task.state == TaskHelper.TASKSTATE_CLOSED_INCOMPLETE || (task.state > TaskHelper.TASKSTATE_WORK_IN_PROGRESS && !force))
+            return false;
+        task.state = TaskHelper.TASKSTATE_CLOSED_INCOMPLETE;
+        return true;
+    }
+    function setClosedSkipped(task: taskFields, force?: boolean): boolean {
+        if (gs.nil(task) || task.state == TaskHelper.TASKSTATE_CLOSED_SKIPPED || (task.state > TaskHelper.TASKSTATE_WORK_IN_PROGRESS && !force))
+            return false;
+        task.state = TaskHelper.TASKSTATE_CLOSED_SKIPPED;
+        return true;
+    }
     function getCaller(task: taskFields): sys_userFields {
         var caller: sys_userFields;
         switch ('' + task.sys_class_name) {
@@ -362,6 +454,15 @@ const TaskHelper: Readonly<TaskHelperConstructor> & { new(task: string | taskFie
         isApprovedOrNotRequired(this: ITaskHelperPrototype): boolean { return isApprovedOrNotRequired(this._task); },
         isUnapproved(this: ITaskHelperPrototype): boolean { return isUnapproved(this._task); },
         isRejectedOrDuplicate(this: ITaskHelperPrototype): boolean { return isRejectedOrDuplicate(this._task); },
+        isClosedIncomplete(this: ITaskHelperPrototype): boolean { return isClosedIncomplete(this._task); },
+        isClosedSkipped(this: ITaskHelperPrototype): boolean { return isClosedSkipped(this._task); },
+        isOpen(this: ITaskHelperPrototype): boolean { return isOpen(this._task); },
+        setClosedComplete(this: ITaskHelperPrototype, force?: boolean): boolean { return setClosedComplete(this._task, force); },
+        setClosedIncomplete(this: ITaskHelperPrototype, force?: boolean): boolean { return setClosedIncomplete(this._task, force); },
+        setClosedSkipped(this: ITaskHelperPrototype, force?: boolean): boolean { return setClosedSkipped(this._task, force); },
+        setInProgress(this: ITaskHelperPrototype, force?: boolean): boolean { return setInProgress(this._task, force); },
+        setOpen(this: ITaskHelperPrototype, force?: boolean): boolean { return setOpen(this._task, force); },
+        setPending(this: ITaskHelperPrototype, force?: boolean): boolean { return setPending(this._task, force); },
         type: 'TaskHelper'
     };
     return taskHelperConstructor;

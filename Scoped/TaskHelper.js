@@ -44,6 +44,51 @@ var TaskHelper = (function () {
     function isRejectedOrDuplicate(task) {
         return !gs.nil(task) && (task.approval == TaskHelper.TASKAPPPROVAL_REJECTED || task.approval == TaskHelper.TASKAPPPROVAL_DUPLICATE);
     }
+    function isOpen(task) {
+        return !gs.nil(task) && task.state == TaskHelper.TASKSTATE_OPEN;
+    }
+    function isClosedIncomplete(task) {
+        return !gs.nil(task) && task.state == TaskHelper.TASKSTATE_CLOSED_INCOMPLETE;
+    }
+    function isClosedSkipped(task) {
+        return !gs.nil(task) && task.state == TaskHelper.TASKSTATE_CLOSED_SKIPPED;
+    }
+    function setPending(task, force) {
+        if (gs.nil(task) || task.state == TaskHelper.TASKSTATE_PENDING || (task.state > TaskHelper.TASKSTATE_WORK_IN_PROGRESS && !force))
+            return false;
+        task.state = TaskHelper.TASKSTATE_PENDING;
+        return true;
+    }
+    function setOpen(task, force) {
+        if (gs.nil(task) || task.state == TaskHelper.TASKSTATE_OPEN || (task.state > TaskHelper.TASKSTATE_WORK_IN_PROGRESS && !force))
+            return false;
+        task.state = TaskHelper.TASKSTATE_OPEN;
+        return true;
+    }
+    function setInProgress(task, force) {
+        if (gs.nil(task) || task.state == TaskHelper.TASKSTATE_WORK_IN_PROGRESS || (task.state > TaskHelper.TASKSTATE_WORK_IN_PROGRESS && !force))
+            return false;
+        task.state = TaskHelper.TASKSTATE_WORK_IN_PROGRESS;
+        return true;
+    }
+    function setClosedComplete(task, force) {
+        if (gs.nil(task) || task.state == TaskHelper.TASKSTATE_CLOSED_COMPLETE || (task.state > TaskHelper.TASKSTATE_WORK_IN_PROGRESS && !force))
+            return false;
+        task.state = TaskHelper.TASKSTATE_CLOSED_COMPLETE;
+        return true;
+    }
+    function setClosedIncomplete(task, force) {
+        if (gs.nil(task) || task.state == TaskHelper.TASKSTATE_CLOSED_INCOMPLETE || (task.state > TaskHelper.TASKSTATE_WORK_IN_PROGRESS && !force))
+            return false;
+        task.state = TaskHelper.TASKSTATE_CLOSED_INCOMPLETE;
+        return true;
+    }
+    function setClosedSkipped(task, force) {
+        if (gs.nil(task) || task.state == TaskHelper.TASKSTATE_CLOSED_SKIPPED || (task.state > TaskHelper.TASKSTATE_WORK_IN_PROGRESS && !force))
+            return false;
+        task.state = TaskHelper.TASKSTATE_CLOSED_SKIPPED;
+        return true;
+    }
     function getCaller(task) {
         var caller;
         switch ('' + task.sys_class_name) {
@@ -256,6 +301,15 @@ var TaskHelper = (function () {
         isApprovedOrNotRequired: function () { return isApprovedOrNotRequired(this._task); },
         isUnapproved: function () { return isUnapproved(this._task); },
         isRejectedOrDuplicate: function () { return isRejectedOrDuplicate(this._task); },
+        isClosedIncomplete: function () { return isClosedIncomplete(this._task); },
+        isClosedSkipped: function () { return isClosedSkipped(this._task); },
+        isOpen: function () { return isOpen(this._task); },
+        setClosedComplete: function (force) { return setClosedComplete(this._task, force); },
+        setClosedIncomplete: function (force) { return setClosedIncomplete(this._task, force); },
+        setClosedSkipped: function (force) { return setClosedSkipped(this._task, force); },
+        setInProgress: function (force) { return setInProgress(this._task, force); },
+        setOpen: function (force) { return setOpen(this._task, force); },
+        setPending: function (force) { return setPending(this._task, force); },
         type: 'TaskHelper'
     };
     return taskHelperConstructor;
