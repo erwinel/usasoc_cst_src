@@ -9,10 +9,6 @@ interface ITaskHelper extends ICustomClassBase<ITaskHelper, "TaskHelper"> {
      */
     isVip(): boolean;
     /**
-     * Gets approval group according to location-based rules.
-     */
-    getDefaultApprovalGroupByCallerLocation(): sys_user_groupFields;
-    /**
      * Indicates whether a task is in one of the closed states.
      */
     isClosed(): boolean;
@@ -124,8 +120,10 @@ interface TaskHelperConstructor extends CustomClassConstructor1<ITaskHelper, ITa
     (task: string | taskFields): TaskHelper;
     getCaller(task: taskFields): sys_userFields | undefined;
     isVip(task: taskFields): boolean;
-    getDefaultApprovalGroupByLocation(user: sys_userFields): sys_user_groupFields | undefined;
-    getLocationApproverRules(): IRuleCacheItem[];
+    isTask(target: $$element.IDbObject): target is taskElement | taskGlideRecord;
+    getBusinessUnit(target: $$element.IDbObject): business_unitFields | undefined;
+    getCompany(target: $$element.IDbObject): core_companyFields | undefined;
+    getLocation(target: $$element.IDbObject): cmn_locationFields | undefined;
 }
 interface IRuleCacheItem {
     building?: string;

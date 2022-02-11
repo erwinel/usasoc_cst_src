@@ -89,7 +89,23 @@ var TaskHelper = (function () {
         task.state = TaskHelper.TASKSTATE_CLOSED_SKIPPED;
         return true;
     }
-    function getCaller(task) {
+    function isOrInherits(tableName, target) {
+        if (typeof target !== 'object' || null == target)
+            return false;
+        if (!(target instanceof GlideTableHierarchy)) {
+            if (gs.nil(target.getTableName()))
+                return false;
+            if (tableName == target.getTableName())
+                return true;
+            target = new GlideTableHierarchy(target.getTableName());
+        }
+        for (var n in target.getTables()) {
+            if (n == tableName)
+                return true;
+        }
+        return false;
+    }
+    function getCaller(target, gth) {
         var caller;
         switch ('' + task.sys_class_name) {
             case 'incident':
@@ -122,128 +138,215 @@ var TaskHelper = (function () {
         if (!gs.nil(caller))
             return caller;
     }
-    function isVip(task) {
+    function isVip(target) {
         var caller = getCaller(task);
         return typeof caller !== 'undefined' && caller.vip == true;
     }
+    function isTask(target) {
+        return isOrInherits('task', target);
+    }
     function isBusinessUnit(target) {
-        return typeof target === 'object' && null != target && target.getTableName && target.getTableName() == 'business_unit';
+        return isOrInherits('business_unit', target);
     }
     function isDepartment(target) {
-        return typeof target === 'object' && null != target && target.getTableName && target.getTableName() == 'cmn_department';
+        return isOrInherits('cmn_department', target);
     }
     function isUser(target) {
-        return typeof target === 'object' && null != target && target.getTableName && target.getTableName() == 'sys_user';
+        return isOrInherits('sys_user', target);
     }
     function isCompany(target) {
-        return typeof target === 'object' && null != target && target.getTableName && target.getTableName() == 'core_company';
+        return isOrInherits('core_company', target);
     }
     function isLocation(target) {
-        return typeof target === 'object' && null != target && target.getTableName && target.getTableName() == 'cmn_location';
+        return isOrInherits('cmn_location', target);
     }
     function isBuilding(target) {
-        return typeof target === 'object' && null != target && target.getTableName && target.getTableName() == 'cmn_building';
+        return isOrInherits('cmn_building', target);
     }
-    function getBusinessUnit(target) {
-        if (isUser(target))
-            return getBusinessUnit(target.department);
-        if (isDepartment(target)) {
-            if (gs.nil(target.business_unit))
-                return getBusinessUnit(target.parent);
-            return target.business_unit;
+    function isSla(target) {
+        return isOrInherits('sla', target);
+    }
+    function isCmdb(target) {
+        return isOrInherits('cmdb', target);
+    }
+    function isAlmAsset(target) {
+        return isOrInherits('alm_asset', target);
+    }
+    function isCatalogItem(target) {
+        return isOrInherits('sc_cat_item', target);
+    }
+    function isScCategory(target) {
+        return isOrInherits('sc_category', target);
+    }
+    function isChangeRequest(target) {
+        return isOrInherits('change_request', target);
+    }
+    function getDepartment(target, gth) {
+        if (typeof target != 'object' || null === target || !target.getTableName)
+            return;
+        if (typeof gth === 'undefined') {
+            if (gs.nil(target.getTableName()))
+                return;
+            if (target.getTableName() == 'cmn_department')
+                return target;
+            gth = new GlideTableHierarchy(target.getTableName());
+        }
+        if (isDepartment(gth))
+            return target;
+        if (isUser(gth)) {
+            if (!gs.nil(target.department))
+                return target.department;
+        }
+        else if (isAlmAsset(gth)) {
+            if (!gs.nil(target.department))
+                return target.department;
+        }
+        else if (isCmdb(gth)) {
+            if (!gs.nil(target.department))
+                return target.department;
+        }
+        else if (isSla(gth)) {
+            if (!gs.nil(target.department))
+                return target.department;
+        }
+        else if (isOrInherits('change_request_imac', target)) {
+            if (!gs.nil(target.move_department))
+                return target.move_department;
         }
     }
-    function getCompany(target) {
-        if (isCompany(target))
+    function getBusinessUnit(target, gth) {
+        if (typeof target != 'object' || null === target || !target.getTableName)
+            return;
+        if (typeof gth === 'undefined') {
+            if (gs.nil(target.getTableName()))
+                return;
+            if (target.getTableName() == 'business_unit')
+                return target;
+            gth = new GlideTableHierarchy(target.getTableName());
+        }
+        if (isBusinessUnit(gth))
             return target;
-        if (isUser(target)) {
+        if (isUser(gth))
+            return getBusinessUnit(target.department, gth);
+        if (isDepartment(gth)) {
+            if (gs.nil(target.business_unit))
+                return getBusinessUnit(target.parent, gth);
+            if (!gs.nil(target.business_unit))
+                return target.business_unit;
+        }
+    }
+    function getCompany(target, gth) {
+        if (typeof target != 'object' || null === target || !target.getTableName)
+            return;
+        if (typeof gth === 'undefined') {
+            if (gs.nil(target.getTableName()))
+                return;
+            if (target.getTableName() == 'core_company')
+                return target;
+            gth = new GlideTableHierarchy(target.getTableName());
+        }
+        if (isCompany(gth))
+            return target;
+        var result;
+        if (isUser(gth)) {
             if (!gs.nil(target.company))
                 return target.company;
-            return getCompany(target.department);
+            result = getCompany(target.department, gth);
+            if (gs.nil(result)) {
+                result = getCompany(target.building, gth);
+                if (gs.nil(result))
+                    return getCompany(target.location, gth);
+            }
         }
-        if (isBusinessUnit(target))
-            return getCompany(target.parent);
-        if (isDepartment(target)) {
-            var result = getCompany(target.business_unit);
+        else if (isBusinessUnit(gth)) {
+            if (!gs.nil(target.company))
+                return target.company;
+            return getCompany(target.parent, gth);
+        }
+        else if (isDepartment(gth)) {
+            if (!gs.nil(target.company))
+                return target.company;
+            result = getCompany(target.business_unit, gth);
             if (gs.nil(result))
-                return getCompany(target.parent);
-            return result;
+                return getCompany(target.parent, gth);
         }
+        else if (isBuilding(gth)) {
+            return getCompany(target.location, gth);
+        }
+        else if (isLocation(gth)) {
+            if (!gs.nil(target.company))
+                return target.company;
+            return getCompany(target.parent, gth);
+        }
+        else if (isCatalogItem(gth)) {
+            if (!gs.nil(target.vendor))
+                return target.vendor;
+            result = getCompany(target.category, gth);
+            if (gs.nil(result))
+                return getCompany(target.model, gth);
+        }
+        else if (isTask(gth)) {
+            if (!gs.nil(target.company))
+                return target.company;
+            result = getCompany(target.parent, gth);
+            if (gs.nil(result)) {
+                result = getCompany(target.location, gth);
+                if (gs.nil(result))
+                    return getCompany(getCaller(target), gth);
+            }
+        }
+        else if (isAlmAsset(gth)) {
+            if (!gs.nil(target.company))
+                return target.company;
+        }
+        else if (isCmdb(gth)) {
+            if (!gs.nil(target.company))
+                return target.company;
+        }
+        else if (isScCategory(gth))
+            return getCompany(getLocation(target), gth);
+        return result;
     }
-    function getLocation(target) {
+    /*
+     * sc_category,
+     * task
+     * sys_user
+     * cmn_building
+     * sc_cat_item
+     * alm_asset
+     * cmdb
+     */
+    function getLocation(target, gth) {
+        if (typeof target != 'object' || null === target || !target.getTableName)
+            return;
+        if (typeof gth === 'undefined') {
+            if (gs.nil(target.getTableName()))
+                return;
+            if (target.getTableName() == 'cmn_location')
+                return target;
+            gth = new GlideTableHierarchy(target.getTableName());
+        }
         if (isLocation(target))
             return target;
-        if (isUser(target)) {
+        if (isUser(gth)) {
             if (!gs.nil(target.location))
                 return target.location;
             return getLocation(target.building);
         }
-        else if (isBuilding(target)) {
+        else if (isBuilding(gth)) {
+            if (!gs.nil(target.location))
+                return target.location;
+        }
+        else if (isScCategory(gth)) {
             if (!gs.nil(target.location))
                 return target.location;
         }
     }
-    function getSysId(target) {
-        if (!gs.nil(target)) {
-            var sys_id = target.sys_id;
-            if (!gs.nil(sys_id)) {
-                if ((sys_id = '' + sys_id).length > 0)
-                    return sys_id;
-            }
-            if ((sys_id = '' + target).length > 0 && sys_id.match(/^[a-fA-F\d]{32}$/))
-                return target;
-        }
-    }
-    function getDefaultApprovalGroupByLocation(user) {
-        var rules = TaskHelper.getLocationApproverRules();
-        var bld = getSysId(user.building);
-        var bu = getSysId(getBusinessUnit(user));
-        var c = getSysId(getCompany(user));
-        var d = getSysId(user.department);
-        var l = getSysId(getLocation(user));
-        for (var index = 0; index < rules.length; index++) {
-            var r = rules[index];
-            if (r.type == "any") {
-                if ((typeof r.building !== 'undefined' && r.building == bld) || (typeof r.business_unit !== 'undefined' && r.business_unit == bu) ||
-                    (typeof r.company !== 'undefined' && r.company == c) || (typeof r.department !== 'undefined' && r.department == d) ||
-                    (typeof r.location !== 'undefined' && r.location == l))
-                    return r.approval_group;
-            }
-            else if ((typeof r.building !== 'undefined' || r.building == bld) && (typeof r.business_unit !== 'undefined' || r.business_unit == bu) &&
-                (typeof r.company !== 'undefined' || r.company == c) && (typeof r.department !== 'undefined' || r.department == d) &&
-                (typeof r.location !== 'undefined' || r.location == l))
-                return r.approval_group;
-        }
-    }
     taskHelperConstructor.getCaller = getCaller;
+    taskHelperConstructor.getBusinessUnit = getBusinessUnit;
+    taskHelperConstructor.getCompany = getCompany;
+    taskHelperConstructor.getLocation = getLocation;
     taskHelperConstructor.isVip = isVip;
-    taskHelperConstructor.getDefaultApprovalGroupByLocation = getDefaultApprovalGroupByLocation;
-    taskHelperConstructor.getLocationApproverRules = function () {
-        if (typeof taskHelperConstructor._locationApproverRules !== 'undefined')
-            return taskHelperConstructor._locationApproverRules;
-        taskHelperConstructor._locationApproverRules = [];
-        var gr = new GlideRecord('x_44813_usasoc_cst_location_approvers');
-        gr.orderBy('order');
-        gr.query();
-        while (gr.next()) {
-            var item = {
-                approval_group: gr.approval_group,
-                type: ('' + gr.type)
-            };
-            if (!gs.nil(gr.building))
-                item.building = '' + gr.building.sys_id;
-            if (!gs.nil(gr.location))
-                item.location = '' + gr.location.sys_id;
-            if (!gs.nil(gr.department))
-                item.department = '' + gr.department.sys_id;
-            if (!gs.nil(gr.business_unit))
-                item.business_unit = '' + gr.business_unit.sys_id;
-            if (!gs.nil(gr.company))
-                item.company = '' + gr.company.sys_id;
-            taskHelperConstructor._locationApproverRules.push(item);
-        }
-        return taskHelperConstructor._locationApproverRules;
-    };
     taskHelperConstructor.prototype = {
         _task: undefined,
         initialize: function (task) {
@@ -287,9 +390,6 @@ var TaskHelper = (function () {
         },
         isVip: function () {
             return isVip(this._task);
-        },
-        getDefaultApprovalGroupByCallerLocation: function () {
-            return getDefaultApprovalGroupByLocation(this.getCaller());
         },
         isClosed: function () { return isClosed(this._task); },
         isPending: function () { return isPending(this._task); },

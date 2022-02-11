@@ -82,12 +82,6 @@ interface IUSASOCCustomizationsPrototype extends ICustomClassPrototype0<IUSASOCC
     _newIdeaAssignmentGroup?: sys_user_groupGlideRecord | {
         sys_id: string;
     };
-    _defaultScCatItemApprovalGroup?: sys_user_groupGlideRecord | {
-        sys_id: string;
-    };
-    _defaultScCatItemAssignmentGroup?: sys_user_groupGlideRecord | {
-        sys_id: string;
-    };
 }
 interface USASOCCustomizations extends Readonly<IUSASOCCustomizations> {
 }
@@ -95,6 +89,8 @@ interface USASOCCustomizationsConstructor extends CustomClassConstructor0<IUSASO
     /**
      * The name of event for newly submitted task-based records that are not assigned.
      *
+     * @static
+     * @readonly
      * @type {"x_44813_usasoc_cst.task.unassigned"}
      * @memberof USASOCCustomizationsConstructor
      */
@@ -102,6 +98,8 @@ interface USASOCCustomizationsConstructor extends CustomClassConstructor0<IUSASO
     /**
      * The name of event for newly submitted Ideas.
      *
+     * @static
+     * @readonly
      * @type {"x_44813_usasoc_cst.idea.new"}
      * @memberof USASOCCustomizationsConstructor
      */
@@ -109,6 +107,8 @@ interface USASOCCustomizationsConstructor extends CustomClassConstructor0<IUSASO
     /**
      * The name of category for custom USASOC system properties.
      *
+     * @static
+     * @readonly
      * @type {"USASOC Customization Settings"}
      * @memberof USASOCCustomizationsConstructor
      */
@@ -116,6 +116,8 @@ interface USASOCCustomizationsConstructor extends CustomClassConstructor0<IUSASO
     /**
      * The name of system property that contains the SDLC-related usage for the current ServiceNow instance.
      *
+     * @static
+     * @readonly
      * @type {"x_44813_usasoc_cst.instance_sdlc_stage"}
      * @memberof USASOCCustomizationsConstructor
      * @see {InstanceSdlcStage} for values that can be stored by this property.
@@ -124,6 +126,8 @@ interface USASOCCustomizationsConstructor extends CustomClassConstructor0<IUSASO
     /**
      * The value of the "x_44813_usasoc_cst.instance_sdlc_stage" system property ({@link #getInstanceSdlcStage}) when the current ServiceNow instance is for production use.
      *
+     * @static
+     * @readonly
      * @type {"prod"}
      * @memberof USASOCCustomizationsConstructor
      */
@@ -131,6 +135,8 @@ interface USASOCCustomizationsConstructor extends CustomClassConstructor0<IUSASO
     /**
      * The value of the "x_44813_usasoc_cst.instance_sdlc_stage" system property ({@link #getInstanceSdlcStage}) when the current ServiceNow instance is for user-acceptance testing.
      *
+     * @static
+     * @readonly
      * @type {"uat"}
      * @memberof USASOCCustomizationsConstructor
      */
@@ -138,6 +144,8 @@ interface USASOCCustomizationsConstructor extends CustomClassConstructor0<IUSASO
     /**
      * The value of the "x_44813_usasoc_cst.instance_sdlc_stage" system property ({@link #getInstanceSdlcStage}) when the current ServiceNow instance is for technical pre-production deployment testing.
      *
+     * @static
+     * @readonly
      * @type {"test"}
      * @memberof USASOCCustomizationsConstructor
      */
@@ -145,6 +153,8 @@ interface USASOCCustomizationsConstructor extends CustomClassConstructor0<IUSASO
     /**
      * The value of the "x_44813_usasoc_cst.instance_sdlc_stage" system property ({@link #getInstanceSdlcStage}) when the current ServiceNow instance is for building release packages.
      *
+     * @static
+     * @readonly
      * @type {"dev"}
      * @memberof USASOCCustomizationsConstructor
      */
@@ -152,6 +162,8 @@ interface USASOCCustomizationsConstructor extends CustomClassConstructor0<IUSASO
     /**
      * The value of the "x_44813_usasoc_cst.instance_sdlc_stage" system property ({@link #getInstanceSdlcStage}) when the current ServiceNow instance is for research and development purposes.
      *
+     * @static
+     * @readonly
      * @type {"sb"}
      * @memberof USASOCCustomizationsConstructor
      */
@@ -159,6 +171,8 @@ interface USASOCCustomizationsConstructor extends CustomClassConstructor0<IUSASO
     /**
      * The value of the "x_44813_usasoc_cst.instance_sdlc_stage" system property ({@link #getInstanceSdlcStage}) when the current ServiceNow instance does not pertain to a specific SDLC-relate purpose.
      *
+     * @static
+     * @readonly
      * @type {"none"}
      * @memberof USASOCCustomizationsConstructor
      */
@@ -166,6 +180,8 @@ interface USASOCCustomizationsConstructor extends CustomClassConstructor0<IUSASO
     /**
      * The name of system property that contains the base URL of the default GIT repository used version control of ServiceNow applications.
      *
+     * @static
+     * @readonly
      * @type {"x_44813_usasoc_cst.default_git_instance_base_url"}
      * @memberof USASOCCustomizationsConstructor
      */
@@ -173,6 +189,8 @@ interface USASOCCustomizationsConstructor extends CustomClassConstructor0<IUSASO
     /**
      * The name of the system property that contains the Sys ID of the assignment group for newly-submitted ideas.
      *
+     * @static
+     * @readonly
      * @type {"x_44813_usasoc_cst.new_idea_assignment_group"}
      * @memberof USASOCCustomizationsConstructor
      */
@@ -180,6 +198,8 @@ interface USASOCCustomizationsConstructor extends CustomClassConstructor0<IUSASO
     /**
      * The name of the database that defines location-based approval groups.
      *
+     * @static
+     * @readonly
      * @type {"x_44813_usasoc_cst_location_approvers"}
      * @memberof USASOCCustomizationsConstructor
      */
@@ -187,6 +207,8 @@ interface USASOCCustomizationsConstructor extends CustomClassConstructor0<IUSASO
     /**
      * A {@link RegExp} that matches a valid ServiceNow Sys ID string.
      *
+     * @static
+     * @readonly
      * @type {RegExp}
      * @memberof USASOCCustomizationsConstructor
      */
@@ -196,6 +218,8 @@ interface USASOCCustomizationsConstructor extends CustomClassConstructor0<IUSASO
     /**
      * Converts a value to a JavaScript string that contains a Sys ID.
      *
+     * @static
+     * @readonly
      * @param {*} sys_id The value to convert.
      * @returns {(string | undefined)} The value as a JavaScript string containing a Sys ID or undefined if the converted string value does not match {@link .REGEX_SYS_ID}.
      * @memberof USASOCCustomizationsConstructor
@@ -204,6 +228,8 @@ interface USASOCCustomizationsConstructor extends CustomClassConstructor0<IUSASO
     /**
      * Tests whether an object is a {@link GlideRecord} whose table extends from the "task" table.
      *
+     * @static
+     * @readonly
      * @param {*} obj The object to test.
      * @returns {obj is taskGlideRecord} True if the object is a {@link GlideRecord} whose table extends from the "task" table; otherwise, false.
      * @memberof USASOCCustomizationsConstructor
@@ -212,6 +238,8 @@ interface USASOCCustomizationsConstructor extends CustomClassConstructor0<IUSASO
     /**
      * Tests whether a {@link $$element.IDBObject} is a {@link GlideRecord} or {@link IGlideElement} whose table matches or extends the name of a specified table.
      *
+     * @static
+     * @readonly
      * @param {$$element.IDbObject} obj The object to test.
      * @param {string} tableName The name of the table or parent table to match.
      * @returns {boolean} true if the object is a {@link GlideRecord} or {@link IGlideElement} whose table matches or extends the name of a specified table; otherwise, false.
@@ -221,6 +249,8 @@ interface USASOCCustomizationsConstructor extends CustomClassConstructor0<IUSASO
     /**
      * Tests whether an object is a {@link GlideRecord} or {@link IGlideElement} whose table extends from the "task" table.
      *
+     * @static
+     * @readonly
      * @param {*} obj The object to test.
      * @returns {obj is taskFields} true if the object is a {@link GlideRecord} or {@link IGlideElement} whose table extends from the "task" table; otherwise, false.
      * @memberof USASOCCustomizationsConstructor

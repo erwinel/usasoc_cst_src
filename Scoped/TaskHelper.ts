@@ -10,10 +10,6 @@ interface ITaskHelper extends ICustomClassBase<ITaskHelper, "TaskHelper"> {
      */
     isVip(): boolean;
     /**
-     * Gets approval group according to location-based rules.
-     */
-    getDefaultApprovalGroupByCallerLocation(): sys_user_groupFields;
-    /**
      * Indicates whether a task is in one of the closed states.
      */
     isClosed(): boolean;
@@ -127,8 +123,10 @@ interface TaskHelperConstructor extends CustomClassConstructor1<ITaskHelper, ITa
     (task: string | taskFields): TaskHelper;
     getCaller(task: taskFields): sys_userFields | undefined;
     isVip(task: taskFields): boolean;
-    getDefaultApprovalGroupByLocation(user: sys_userFields): sys_user_groupFields | undefined;
-    getLocationApproverRules(): IRuleCacheItem[];
+    isTask(target: $$element.IDbObject): target is taskElement | taskGlideRecord;
+    getBusinessUnit(target: $$element.IDbObject): business_unitFields | undefined;
+    getCompany(target: $$element.IDbObject): core_companyFields | undefined;
+    getLocation(target: $$element.IDbObject): cmn_locationFields | undefined;
 }
 
 interface IRuleCacheItem {
@@ -232,7 +230,23 @@ const TaskHelper: Readonly<TaskHelperConstructor> & { new(task: string | taskFie
         task.state = TaskHelper.TASKSTATE_CLOSED_SKIPPED;
         return true;
     }
-    function getCaller(task: taskFields): sys_userFields {
+    function isOrInherits(tableName: string, target: $$element.IDbObject | GlideTableHierarchy): boolean {
+        if (typeof target !== 'object' || null == target)
+            return false;
+        if (!(target instanceof GlideTableHierarchy)) {
+            if (gs.nil(target.getTableName()))
+                return false;
+            if (tableName == target.getTableName())
+                return true;
+            target = new GlideTableHierarchy(target.getTableName());
+        }
+        for (var n in target.getTables()) {
+            if (n == tableName)
+                return true;
+        }
+        return false;
+    }
+    function getCaller(target: $$element.IDbObject, gth?: GlideTableHierarchy): sys_userFields {
         var caller: sys_userFields;
         switch ('' + task.sys_class_name) {
             case 'incident':
@@ -266,139 +280,218 @@ const TaskHelper: Readonly<TaskHelperConstructor> & { new(task: string | taskFie
             return caller;
     }
 
-    function isVip(task: taskFields): boolean {
+    function isVip(target: $$element.IDbObject): boolean {
         var caller: sys_userFields = <sys_userFields>getCaller(task);
         return typeof caller !== 'undefined' && caller.vip == true;
     }
 
-    function isBusinessUnit(target: $$element.IDbObject): target is business_unitFields {
-        return typeof target === 'object' && null != target && target.getTableName && target.getTableName() == 'business_unit';
+    function isTask(target: $$element.IDbObject | GlideTableHierarchy): target is taskFields | GlideTableHierarchy {
+        return isOrInherits('task', target);
     }
 
-    function isDepartment(target: $$element.IDbObject): target is cmn_departmentFields {
-        return typeof target === 'object' && null != target && target.getTableName && target.getTableName() == 'cmn_department';
+    function isBusinessUnit(target: $$element.IDbObject | GlideTableHierarchy): target is business_unitFields | GlideTableHierarchy {
+        return isOrInherits('business_unit', target);
     }
 
-    function isUser(target: $$element.IDbObject): target is sys_userFields {
-        return typeof target === 'object' && null != target && target.getTableName && target.getTableName() == 'sys_user';
+    function isDepartment(target: $$element.IDbObject | GlideTableHierarchy): target is cmn_departmentFields | GlideTableHierarchy {
+        return isOrInherits('cmn_department', target);
     }
 
-    function isCompany(target: $$element.IDbObject): target is core_companyFields {
-        return typeof target === 'object' && null != target && target.getTableName && target.getTableName() == 'core_company';
+    function isUser(target: $$element.IDbObject | GlideTableHierarchy): target is sys_userFields | GlideTableHierarchy {
+        return isOrInherits('sys_user', target);
     }
 
-    function isLocation(target: $$element.IDbObject): target is cmn_locationFields {
-        return typeof target === 'object' && null != target && target.getTableName && target.getTableName() == 'cmn_location';
+    function isCompany(target: $$element.IDbObject | GlideTableHierarchy): target is core_companyFields | GlideTableHierarchy {
+        return isOrInherits('core_company', target);
     }
 
-    function isBuilding(target: $$element.IDbObject): target is cmn_buildingFields {
-        return typeof target === 'object' && null != target && target.getTableName && target.getTableName() == 'cmn_building';
+    function isLocation(target: $$element.IDbObject | GlideTableHierarchy): target is cmn_locationFields | GlideTableHierarchy {
+        return isOrInherits('cmn_location', target);
     }
 
-    function getBusinessUnit(target: $$element.IDbObject): business_unitFields | undefined {
-        if (isUser(target))
-            return getBusinessUnit(<cmn_departmentFields>target.department);
+    function isBuilding(target: $$element.IDbObject | GlideTableHierarchy): target is cmn_buildingFields | GlideTableHierarchy {
+        return isOrInherits('cmn_building', target);
+    }
 
-        if (isDepartment(target)) {
-            if (gs.nil(target.business_unit))
-                return getBusinessUnit(<cmn_departmentFields>target.parent);
-            return <business_unitFields>target.business_unit;
+    function isSla(target: $$element.IDbObject | GlideTableHierarchy): target is slaFields | GlideTableHierarchy {
+        return isOrInherits('sla', target);
+    }
+
+    function isCmdb(target: $$element.IDbObject | GlideTableHierarchy): target is cmdbFields | GlideTableHierarchy {
+        return isOrInherits('cmdb', target);
+    }
+
+    function isAlmAsset(target: $$element.IDbObject | GlideTableHierarchy): target is alm_assetFields | GlideTableHierarchy {
+        return isOrInherits('alm_asset', target);
+    }
+
+    function isCatalogItem(target: $$element.IDbObject | GlideTableHierarchy): target is sc_cat_itemFields | GlideTableHierarchy {
+        return isOrInherits('sc_cat_item', target);
+    }
+
+    function isScCategory(target: $$element.IDbObject | GlideTableHierarchy): target is sc_categoryFields | GlideTableHierarchy {
+        return isOrInherits('sc_category', target);
+    }
+
+    function isChangeRequest(target: $$element.IDbObject | GlideTableHierarchy): target is change_requestFields | GlideTableHierarchy {
+        return isOrInherits('change_request', target);
+    }
+
+    function getDepartment(target: $$element.IDbObject, gth?: GlideTableHierarchy): cmn_departmentFields | undefined {
+        if (typeof target != 'object' || null === target || !target.getTableName)
+            return;
+        if (typeof gth === 'undefined') {
+            if (gs.nil(target.getTableName()))
+                return;
+            if (target.getTableName() == 'cmn_department')
+                return <cmn_departmentFields>target;
+            gth = new GlideTableHierarchy(target.getTableName());
+        }
+        if (isDepartment(gth))
+            return <cmn_departmentFields>target;
+        if (isUser(gth)) {
+            if (!gs.nil((<sys_userFields>target).department))
+                return <cmn_departmentFields>(<sys_userFields>target).department;
+        } else if (isAlmAsset(gth)) {
+            if (!gs.nil((<alm_assetFields>target).department))
+                return <cmn_departmentFields>(<alm_assetFields>target).department;
+        } else if (isCmdb(gth)) {
+            if (!gs.nil((<cmdbFields>target).department))
+                return <cmn_departmentFields>(<cmdbFields>target).department;
+        } else if (isSla(gth)) {
+            if (!gs.nil((<slaFields>target).department))
+                return <cmn_departmentFields>(<slaFields>target).department;
+        } else if (isOrInherits('change_request_imac', target)) {
+            if (!gs.nil((<change_request_imacFields>target).move_department))
+                return <cmn_departmentFields>(<change_request_imacFields>target).move_department;
         }
     }
 
-    function getCompany(target: $$element.IDbObject): core_companyFields | undefined {
-        if (isCompany(target))
-            return target;
-        if (isUser(target)) {
-            if (!gs.nil(target.company))
-                return <core_companyFields>target.company;
-            return getCompany(<cmn_departmentFields>target.department);
+    function getBusinessUnit(target: $$element.IDbObject, gth?: GlideTableHierarchy): business_unitFields | undefined {
+        if (typeof target != 'object' || null === target || !target.getTableName)
+            return;
+        if (typeof gth === 'undefined') {
+            if (gs.nil(target.getTableName()))
+                return;
+            if (target.getTableName() == 'business_unit')
+                return <business_unitFields>target;
+            gth = new GlideTableHierarchy(target.getTableName());
         }
-        if (isBusinessUnit(target))
-            return getCompany(<business_unitFields>target.parent);
-        if (isDepartment(target)) {
-            var result: core_companyFields = getCompany(<business_unitFields>target.business_unit);
-            if (gs.nil(result))
-                return getCompany(<cmn_departmentFields>target.parent);
-            return result;
-        }
-    }
-
-    function getLocation(target: $$element.IDbObject): cmn_locationFields | undefined {
-        if (isLocation(target))
-            return target;
-        if (isUser(target)) {
-            if (!gs.nil(target.location))
-                return <cmn_locationFields>target.location;
-            return getLocation(<cmn_buildingFields>target.building);
-        } else if (isBuilding(target)) {
-            if (!gs.nil(target.location))
-                return <cmn_locationFields>target.location;
+        if (isBusinessUnit(gth))
+            return <business_unitFields>target;
+        if (isUser(gth))
+            return getBusinessUnit(<cmn_departmentFields>(<sys_userFields>target).department, gth);
+        if (isDepartment(gth)) {
+            if (gs.nil((<cmn_departmentFields>target).business_unit))
+                return getBusinessUnit(<cmn_departmentFields>(<cmn_departmentFields>target).parent, gth);
+            if (!gs.nil((<cmn_departmentFields>target).business_unit))
+                return <business_unitFields>(<cmn_departmentFields>target).business_unit;
         }
     }
 
-    function getSysId(target: any): string | undefined {
-        if (!gs.nil(target)) {
-            var sys_id: $$rhino.Nilable<$$property.Element> | string = (<IGlideTableProperties>target).sys_id;
-            if (!gs.nil(sys_id)) {
-                if ((sys_id = '' + sys_id).length > 0)
-                    return sys_id;
+    function getCompany(target: $$element.IDbObject, gth?: GlideTableHierarchy): core_companyFields | undefined {
+        if (typeof target != 'object' || null === target || !target.getTableName)
+            return;
+        if (typeof gth === 'undefined') {
+            if (gs.nil(target.getTableName()))
+                return;
+            if (target.getTableName() == 'core_company')
+                return <core_companyFields>target;
+            gth = new GlideTableHierarchy(target.getTableName());
+        }
+        if (isCompany(gth))
+            return <core_companyFields>target;
+        var result: core_companyFields;
+        if (isUser(gth)) {
+            if (!gs.nil((<sys_userFields>target).company))
+                return <core_companyFields>(<sys_userFields>target).company;
+            result = getCompany(<cmn_departmentFields>(<sys_userFields>target).department, gth);
+            if (gs.nil(result)) {
+                result = getCompany(<cmn_buildingFields>(<sys_userFields>target).building, gth);
+                if (gs.nil(result))
+                    return getCompany(<cmn_locationFields>(<sys_userFields>target).location, gth);
             }
-            if ((sys_id = '' + target).length > 0 && sys_id.match(/^[a-fA-F\d]{32}$/))
-                return target;
-        }
+        } else if (isBusinessUnit(gth)) {
+            if (!gs.nil((<business_unitFields>target).company))
+                return <core_companyFields>(<business_unitFields>target).company;
+            return getCompany(<business_unitFields>(<business_unitFields>target).parent, gth);
+        } else if (isDepartment(gth)) {
+            if (!gs.nil((<cmn_departmentFields>target).company))
+                return <core_companyFields>(<cmn_departmentFields>target).company;
+            result = getCompany(<business_unitFields>(<cmn_departmentFields>target).business_unit, gth);
+            if (gs.nil(result))
+                return getCompany(<cmn_departmentFields>(<cmn_departmentFields>target).parent, gth);
+        } else if (isBuilding(gth)) {
+            return getCompany(<cmn_locationFields>(<cmn_buildingFields>target).location, gth);
+        } else if (isLocation(gth)) {
+            if (!gs.nil((<cmn_locationFields>target).company))
+                return <core_companyFields>(<cmn_locationFields>target).company;
+            return getCompany(<cmn_locationFields>(<cmn_locationFields>target).parent, gth);
+        } else if (isCatalogItem(gth)) {
+            if (!gs.nil((<sc_cat_itemFields>target).vendor))
+                return <core_companyFields>(<sc_cat_itemFields>target).vendor;
+            result = getCompany(<sc_categoryFields>(<sc_cat_itemFields>target).category, gth);
+            if (gs.nil(result))
+                return getCompany(<cmdb_modelFields>(<sc_cat_itemFields>target).model, gth);
+        } else if (isTask(gth)) {
+            if (!gs.nil((<taskFields>target).company))
+                return <core_companyFields>(<taskFields>target).company;
+            result = getCompany(<taskFields>(<taskFields>target).parent, gth);
+            if (gs.nil(result)) {
+                result = getCompany(<cmn_locationFields>(<taskFields>target).location, gth);
+                if (gs.nil(result))
+                    return getCompany(getCaller(target), gth);
+            }
+        } else if (isAlmAsset(gth)) {
+            if (!gs.nil((<alm_assetFields>target).company))
+                return <core_companyFields>(<alm_assetFields>target).company;
+        } else if (isCmdb(gth)) {
+            if (!gs.nil((<cmdbFields>target).company))
+                return <core_companyFields>(<cmdbFields>target).company;
+        } else if (isScCategory(gth))
+            return getCompany(getLocation(target), gth);
+        return result;
     }
 
-    function getDefaultApprovalGroupByLocation(user: sys_userFields): sys_user_groupFields | undefined {
-        var rules: IRuleCacheItem[] = TaskHelper.getLocationApproverRules();
-        var bld: string = getSysId(user.building);
-        var bu: string = getSysId(getBusinessUnit(user));
-        var c: string = getSysId(getCompany(user));
-        var d: string = getSysId(user.department);
-        var l: string = getSysId(getLocation(user));
-        for (let index = 0; index < rules.length; index++) {
-            const r = rules[index];
-            if (r.type == "any") {
-                if ((typeof r.building !== 'undefined' && r.building == bld) || (typeof r.business_unit !== 'undefined' && r.business_unit == bu) ||
-                    (typeof r.company !== 'undefined' && r.company == c) || (typeof r.department !== 'undefined' && r.department == d) ||
-                    (typeof r.location !== 'undefined' && r.location == l))
-                    return r.approval_group;
-            } else if ((typeof r.building !== 'undefined' || r.building == bld) && (typeof r.business_unit !== 'undefined' || r.business_unit == bu) &&
-                (typeof r.company !== 'undefined' || r.company == c) && (typeof r.department !== 'undefined' || r.department == d) &&
-                (typeof r.location !== 'undefined' || r.location == l))
-                return r.approval_group;
+    /*
+     * sc_category,
+     * task
+     * sys_user
+     * cmn_building
+     * sc_cat_item
+     * alm_asset
+     * cmdb
+     */
+    function getLocation(target: $$element.IDbObject, gth?: GlideTableHierarchy): cmn_locationFields | undefined {
+        if (typeof target != 'object' || null === target || !target.getTableName)
+            return;
+        if (typeof gth === 'undefined') {
+            if (gs.nil(target.getTableName()))
+                return;
+            if (target.getTableName() == 'cmn_location')
+                return <cmn_locationFields>target;
+            gth = new GlideTableHierarchy(target.getTableName());
+        }
+        if (isLocation(target))
+            return <cmn_locationFields>target;
+        if (isUser(gth)) {
+            if (!gs.nil((<sys_userFields>target).location))
+                return <cmn_locationFields>(<sys_userFields>target).location;
+            return getLocation(<cmn_buildingFields>(<sys_userFields>target).building);
+        } else if (isBuilding(gth)) {
+            if (!gs.nil((<cmn_buildingFields>target).location))
+                return <cmn_locationFields>(<cmn_buildingFields>target).location;
+        } else if (isScCategory(gth)) {
+            if (!gs.nil((<sc_categoryFields>target).location))
+                return <cmn_locationFields>(<sc_categoryFields>target).location;
         }
     }
 
     taskHelperConstructor.getCaller = getCaller;
+    taskHelperConstructor.getBusinessUnit = getBusinessUnit;
+    taskHelperConstructor.getCompany = getCompany;
+    taskHelperConstructor.getLocation = getLocation;
     taskHelperConstructor.isVip = isVip;
-    taskHelperConstructor.getDefaultApprovalGroupByLocation = getDefaultApprovalGroupByLocation;
-    taskHelperConstructor.getLocationApproverRules = function (): IRuleCacheItem[] {
-        if (typeof taskHelperConstructor._locationApproverRules !== 'undefined')
-            return taskHelperConstructor._locationApproverRules;
-        taskHelperConstructor._locationApproverRules = [];
-        var gr: x_44813_usasoc_cst_location_approversGlideRecord = <x_44813_usasoc_cst_location_approversGlideRecord>new GlideRecord('x_44813_usasoc_cst_location_approvers');
-        gr.orderBy('order');
-        gr.query();
-        while (gr.next()) {
-            var item: IRuleCacheItem = {
-                approval_group: <sys_user_groupFields>gr.approval_group,
-                type: <USASOC_CST_LOCATION_APPROVERS_TYPE>('' + gr.type)
-            };
-            if (!gs.nil(gr.building))
-                item.building = '' + (<cmn_buildingFields>gr.building).sys_id;
-            if (!gs.nil(gr.location))
-                item.location = '' + (<cmn_locationFields>gr.location).sys_id;
-            if (!gs.nil(gr.department))
-                item.department = '' + (<cmn_departmentFields>gr.department).sys_id;
-            if (!gs.nil(gr.business_unit))
-                item.business_unit = '' + (<business_unitFields>gr.business_unit).sys_id;
-            if (!gs.nil(gr.company))
-                item.company = '' + (<core_companyFields>gr.company).sys_id;
-            taskHelperConstructor._locationApproverRules.push(item);
-        }
-        return taskHelperConstructor._locationApproverRules;
-    };
     taskHelperConstructor.prototype = {
         _task: undefined,
         initialize: function (this: ITaskHelperPrototype, task: string | taskFields) {
@@ -440,9 +533,6 @@ const TaskHelper: Readonly<TaskHelperConstructor> & { new(task: string | taskFie
         },
         isVip: function (this: ITaskHelperPrototype): boolean {
             return isVip(this._task);
-        },
-        getDefaultApprovalGroupByCallerLocation: function(this: ITaskHelperPrototype): sys_user_groupFields {
-            return getDefaultApprovalGroupByLocation(<sys_userFields>this.getCaller());
         },
         isClosed(this: ITaskHelperPrototype): boolean { return isClosed(this._task); },
         isPending(this: ITaskHelperPrototype): boolean { return isPending(this._task); },

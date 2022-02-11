@@ -41,6 +41,9 @@
     <TypeScriptCompile Include="business_rules.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="LocationBasedAssignmentGroups.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="types\index.d.ts" />
     <TypeScriptCompile Include="types\service-now\Glide.d.ts" />
     <TypeScriptCompile Include="types\service-now\Global.d.ts" />
